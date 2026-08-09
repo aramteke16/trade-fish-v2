@@ -34,6 +34,11 @@ def strategy(key: str):
     return yaml_settings()["strategy"][key]
 
 
+def universe() -> list[str]:
+    with open(ROOT / "config" / "universe.txt") as f:
+        return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+
+
 def costs() -> dict:
     return yaml_settings()["costs"]
 
