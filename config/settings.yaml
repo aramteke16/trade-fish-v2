@@ -27,7 +27,7 @@ scheduler:
   timezone: Asia/Kolkata
   jobs:
     daily_collect: "0 19 * * *"       # every evening after market hours
-    weekly_score: "0 9 * * mon"       # decision moment
-    monitor_exits: "*/30 9-15 * * mon-fri"
+    weekly_score: "20 9 * * mon"      # decision + entry just after 09:15 open
+    monitor_exits: "*/5 9-15 * * mon-fri"   # barrier checks every 5 min
     friday_exit: "15 15 * * fri"
     weekend_report: "0 10 * * sat"
