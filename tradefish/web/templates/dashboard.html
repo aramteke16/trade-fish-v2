@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block head %}<meta http-equiv="refresh" content="60">{% endblock %}
+{% block content %}
+
+<h2>pipeline health</h2>
+<section class="cards">
+  {% for name, run in jobs.items() %}
+  <div class="card">
+    <h3>{{ name }}</h3>
+    {% if run %}
+      <p class="status status-{{ run.status }}">{{ run.status }}</p>
+      <p class="muted">{{ run.started_at | ist }} IST</p>
+      {% if run.detail %}<p class="detail">{{ run.detail }}</p>{% endif %}
+      {% if run.error %}<p class="error">{{ run.error }}</p>{% endif %}
+    {% else %}
+      <p class="muted">never ran</p>
+    {% endif %}
+    <form method="post" action="/jobs/{{ name }}/run"><button>run now</button></form>
+  </div>
+  {% endfor %}
+</section>
+
+<h2>live activity</h2>
+<section class="panel">
+  <div id="log-feed" class="log-feed"><p class="muted">connecting…</p></div>
+</section>
+
+<section class="row">
+  <div class="panel">
+    <h2>collector (last 24h)</h2>
+    {% if collector %}
+      <table>{% for r in collector %}<tr><td>{{ r.source }}</td><td>{{ r.n }}</td></tr>{% endfor %}</table>
+    {% else %}<p class="muted">nothing collected yet</p>{% endif %}
+    <p class="muted">corpus total: {{ corpus_total }}</p>
+  </div>
+  <div class="panel">
+    <h2>llm extractor</h2>
+    <p>extractions: {{ llm.n }}</p>
+    <p>failures: {{ llm.f }}</p>
+    <p>tokens used: {{ llm.t }}</p>
+  </div>
+</section>
+
+<h2>paper account</h2>
+<section class="row">
+  <div class="panel">
+    <p>starting capital: <b>₹{{ "%.0f"|format(paper.capital) }}</b></p>
+    <p>cash: ₹{{ "%.2f"|format(paper.cash) }}</p>
+    <p>invested (at entry): ₹{{ "%.2f"|format(paper.invested) }}</p>
+    <p>charges paid: ₹{{ "%.2f"|format(paper.fees) }}</p>
+    <p class="{{ 'gain' if paper.net >= 0 else 'loss' }}">net: ₹{{ "%+.2f"|format(paper.net) }}</p>
+  </div>
+  <div class="panel">
+    <h3>manual trade <span class="muted">(test the ledger — weekly_score will trade automatically)</span></h3>
+    <form method="post" action="/paper/buy" class="trade-form">
+      <input name="ticker" placeholder="ticker" required>
+      <input name="qty" type="number" step="1" min="1" placeholder="qty" required>
+      <input name="price" type="number" step="0.05" min="0.05" placeholder="price ₹" required>
+      <button>buy</button>
+    </form>
+    <p class="muted">rejections (e.g. not enough cash) show in live activity</p>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>open positions</h2>
+  {% if positions %}
+  <table>
+    <tr><th>ticker</th><th>qty</th><th>entry</th><th>weight</th><th>sell at</th></tr>
+    {% for p in positions %}
+    <tr><td>{{ p.ticker }}</td><td>{{ p.qty or "—" }}</td><td>{{ p.entry_price }}</td>
+        <td>{{ "%.1f%%"|format(p.weight * 100) }}</td>
+        <td><form method="post" action="/paper/sell/{{ p.id }}" class="trade-form">
+          <input name="price" type="number" step="0.05" min="0.05" placeholder="price ₹" required>
+          <button>sell</button></form></td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">no open positions</p>{% endif %}
+</section>
+
+<section class="panel">
+  <h2>paper transactions</h2>
+  {% if txns %}
+  <table>
+    <tr><th>time</th><th>side</th><th>ticker</th><th>qty</th><th>price</th>
+        <th>value</th><th>charges</th><th>cash Δ</th><th>reason</th></tr>
+    {% for t in txns %}
+    <tr><td class="muted">{{ t.ts | ist }}</td><td class="side-{{ t.side }}">{{ t.side }}</td>
+        <td>{{ t.ticker }}</td><td>{{ "%.0f"|format(t.qty) }}</td><td>{{ t.price }}</td>
+        <td>{{ "%.2f"|format(t.gross_value) }}</td><td>{{ "%.2f"|format(t.txn_cost) }}</td>
+        <td class="{{ 'gain' if t.cash_delta >= 0 else 'loss' }}">{{ "%+.2f"|format(t.cash_delta) }}</td>
+        <td class="muted">{{ t.reason }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">no trades yet</p>{% endif %}
+</section>
+
+<section class="panel">
+  <h2>performance (last 26 weeks)</h2>
+  {% if results %}
+  <table>
+    <tr><th>week</th><th>gross</th><th>net</th><th>hit rate</th><th>IC</th><th>cost drag</th></tr>
+    {% for r in results %}
+    <tr><td>{{ r.week_start }}</td><td>{{ r.gross_return }}</td><td>{{ r.net_return }}</td>
+        <td>{{ r.hit_rate }}</td><td>{{ r.ic }}</td><td>{{ r.cost_drag }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">no results yet — collector is building the corpus</p>{% endif %}
+</section>
+
+{% endblock %}

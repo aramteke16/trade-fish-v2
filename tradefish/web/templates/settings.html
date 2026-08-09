@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>settings</h2>
+{% if saved %}<p class="saved">saved</p>{% endif %}
+
+<form method="post" action="/settings">
+  <section class="panel">
+    <h3>secrets <span class="muted">(stored in app.db — blank leaves unchanged)</span></h3>
+    {% for key, masked in secrets.items() %}
+    <label>{{ key }} <span class="muted">{{ masked }}</span>
+      <input type="password" name="{{ key }}" placeholder="new value">
+    </label>
+    {% endfor %}
+  </section>
+
+  <section class="panel">
+    <h3>llm params</h3>
+    {% for key, value in llm_params.items() %}
+    <label>{{ key }}
+      <input type="text" name="{{ key }}" value="{{ value }}">
+    </label>
+    {% endfor %}
+  </section>
+
+  <section class="panel">
+    <h3>strategy params</h3>
+    {% for key, value in strategy_params.items() %}
+    <label>{{ key }}
+      <input type="text" name="{{ key }}" value="{{ value }}">
+    </label>
+    {% endfor %}
+    <p class="muted">barriers locked at +{{ barriers.upper * 100 }}% / {{ barriers.lower * 100 }}%
+      (plan §9 — derived from volatility, not tuned; edit settings.yaml deliberately to change)</p>
+  </section>
+
+  <button type="submit">save</button>
+</form>
+
+{% endblock %}

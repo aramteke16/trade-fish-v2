@@ -1,0 +1,15 @@
+# env / secrets
+.env
+.venv/
+
+# runtime data (app.db holds secrets, raw/ and cache/ are bulky)
+data/
+
+# python
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# os / editor
+.DS_Store

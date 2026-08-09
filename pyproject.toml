@@ -1,0 +1,29 @@
+[project]
+name = "tradefish"
+version = "0.1.0"
+description = "Weekly cross-sectional alpha system for NSE equities"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "numpy",
+    "lightgbm",
+    "pydantic",
+    "pyyaml",
+    "requests",
+    "python-dotenv",
+    "fastapi",
+    "uvicorn",
+    "jinja2",
+    "python-multipart",
+    "itsdangerous",
+    "apscheduler",
+    "nse",
+    "bse",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["tradefish*"]

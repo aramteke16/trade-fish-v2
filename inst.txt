@@ -1,0 +1,3 @@
+we are implementing a project together. but before that you need to stick to this funcdmentals rules
+1. keep the code simle and easy to read, 
+2 .never add the unnecessary long commands, add a simplest simgle line comment only where needed.

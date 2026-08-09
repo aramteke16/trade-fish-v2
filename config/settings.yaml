@@ -1,0 +1,33 @@
+# strategy defaults (plan-v2.md §2) — runtime overrides come from the settings DB
+universe:
+  size: 150
+  min_adv_crore: 5
+
+strategy:
+  hold_days: 5
+  top_k: 12
+  upper_barrier: 0.06   # locked, see plan §9
+  lower_barrier: -0.03  # locked, see plan §9
+  train_window_weeks: 52
+  refit_weeks: 4
+  embargo_weeks: 1
+  paper_capital: 30000  # fake-money starting balance
+
+costs:
+  brokerage_per_order_rs: 0
+  stt_buy: 0.001
+  stt_sell: 0.001
+  exchange_txn: 0.0000297
+  sebi_rs_per_crore: 10
+  stamp_buy: 0.00015
+  gst: 0.18
+  dp_charge_rs: 15.5
+
+scheduler:
+  timezone: Asia/Kolkata
+  jobs:
+    daily_collect: "0 19 * * *"       # every evening after market hours
+    weekly_score: "0 9 * * mon"       # decision moment
+    monitor_exits: "*/30 9-15 * * mon-fri"
+    friday_exit: "15 15 * * fri"
+    weekend_report: "0 10 * * sat"
