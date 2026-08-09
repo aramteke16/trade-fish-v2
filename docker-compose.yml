@@ -2,7 +2,7 @@ services:
   tradefish:
     build: .
     ports:
-      - "127.0.0.1:8000:8000"   # bind localhost only — front with a reverse proxy if remote
+      - "8000:8000"   # public — plain HTTP, so use a long random ADMIN_PASSWORD
     env_file: .env
     volumes:
       - ./data:/app/data
