@@ -3,13 +3,14 @@
 import logging
 
 from tradefish import db, log
-from tradefish.pipelines import (daily_collect, friday_exit, monitor_exits,
-                                 weekend_report, weekly_score)
+from tradefish.pipelines import (daily_collect, daily_extract, friday_exit,
+                                 monitor_exits, weekend_report, weekly_score)
 
 logger = logging.getLogger(__name__)
 
 JOBS = {
     "daily_collect": daily_collect.run,
+    "daily_extract": daily_extract.run,
     "weekly_score": weekly_score.run,
     "monitor_exits": monitor_exits.run,
     "friday_exit": friday_exit.run,

@@ -10,6 +10,8 @@ import logging
 import pandas as pd
 import yfinance as yf
 
+from tradefish import db
+
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +39,14 @@ def history(symbols: list[str], weeks: int = 30) -> dict[str, pd.DataFrame]:
 def latest(symbol: str) -> float | None:
     """Near-live quote (delayed ~15 min on yfinance — fine for paper trading)."""
     try:
-        return float(yf.Ticker(_yf(symbol)).fast_info["last_price"])
+        price = float(yf.Ticker(_yf(symbol)).fast_info["last_price"])
     except Exception as e:
         logger.warning("quote failed for %s: %r", symbol, e)
         return None
+    with db.connect() as conn:  # cached so the dashboard can mark to market
+        conn.execute(
+            "INSERT INTO quotes (ticker, price, ts) VALUES (?, ?, ?)"
+            " ON CONFLICT(ticker) DO UPDATE SET price = excluded.price, ts = excluded.ts",
+            (symbol, price, db.now()),
+        )
+    return price

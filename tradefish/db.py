@@ -57,6 +57,12 @@ CREATE TABLE IF NOT EXISTS positions (
     status TEXT NOT NULL DEFAULT 'open'
 );
 
+CREATE TABLE IF NOT EXISTS quotes (
+    ticker TEXT PRIMARY KEY,
+    price REAL NOT NULL,
+    ts TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS paper_transactions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ts TEXT NOT NULL,

@@ -8,7 +8,8 @@ router = APIRouter()
 
 SECRETS = ["DEEPSEEK_API_KEY", "ANTHROPIC_API_KEY", "BROKER_API_KEY", "ADMIN_PASSWORD"]
 LLM_PARAMS = ["LLM_PROVIDER", "LLM_MODEL", "LLM_TEMPERATURE", "LLM_MAX_RETRIES"]
-STRATEGY_PARAMS = ["top_k", "train_window_weeks", "refit_weeks", "paper_capital"]  # barriers locked (plan §9)
+STRATEGY_PARAMS = ["top_k", "train_window_weeks", "refit_weeks", "paper_capital",
+                   "llm_weight"]  # barriers locked (plan §9)
 
 
 @router.get("/settings")

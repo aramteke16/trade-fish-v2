@@ -12,6 +12,7 @@ strategy:
   refit_weeks: 4
   embargo_weeks: 1
   paper_capital: 30000  # fake-money starting balance
+  llm_weight: 0.3       # LLM share of the blended score; 0 = price-only baseline
 
 costs:
   brokerage_per_order_rs: 0
@@ -27,6 +28,7 @@ scheduler:
   timezone: Asia/Kolkata
   jobs:
     daily_collect: "0 19 * * *"       # every evening after market hours
+    daily_extract: "30 19 * * *"      # LLM-score the day's news right after collection
     weekly_score: "20 9 * * mon"      # decision + entry just after 09:15 open
     monitor_exits: "*/5 9-15 * * mon-fri"   # barrier checks every 5 min
     friday_exit: "15 15 * * fri"

@@ -21,11 +21,17 @@ def features(df: pd.DataFrame) -> dict | None:
     }
 
 
-def rank(feats: dict[str, dict]) -> list[tuple[str, float]]:
-    """Standardize cross-sectionally (plan §4), blend momentum, penalize vol. Best first."""
+def rank(feats: dict[str, dict], llm: dict[str, float] | None = None,
+         llm_weight: float = 0.0) -> list[tuple[str, float]]:
+    """Standardize cross-sectionally (plan §4), blend momentum + LLM. Best first."""
     if not feats:
         return []
     df = pd.DataFrame(feats).T
     z = (df - df.mean()) / (df.std() + 1e-12)
     score = z[["mom_1w", "mom_4w", "mom_12w"]].mean(axis=1) - 0.5 * z["vol"]
+    if llm and llm_weight:
+        # names with no news sit at 0 — absence of news is information, not a gap
+        raw = pd.Series({t: llm.get(t, 0.0) for t in df.index})
+        lz = (raw - raw.mean()) / raw.std() if raw.std() > 0 else raw * 0
+        score = (1 - llm_weight) * score + llm_weight * lz
     return sorted(score.items(), key=lambda kv: kv[1], reverse=True)

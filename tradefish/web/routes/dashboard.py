@@ -1,3 +1,4 @@
+import json
 import logging
 import threading
 from datetime import date, datetime, timedelta
@@ -31,7 +32,9 @@ def dashboard(request: Request):
         )]
         corpus_total = conn.execute("SELECT COUNT(*) FROM announcements").fetchone()[0]
         positions = [_row(r) for r in conn.execute(
-            "SELECT * FROM positions WHERE status = 'open' ORDER BY weight DESC"
+            "SELECT p.*, q.price AS last_price FROM positions p"
+            " LEFT JOIN quotes q ON q.ticker = p.ticker"
+            " WHERE p.status = 'open' ORDER BY p.weight DESC"
         )]
         results = [_row(r) for r in conn.execute(
             "SELECT * FROM weekly_results ORDER BY week_start DESC LIMIT 26"
@@ -40,13 +43,18 @@ def dashboard(request: Request):
             "SELECT COUNT(*) n, COALESCE(SUM(failed), 0) f, COALESCE(SUM(tokens_used), 0) t"
             " FROM extractions"
         ).fetchone())
-        txns = [_row(r) for r in conn.execute(
-            "SELECT * FROM paper_transactions ORDER BY id DESC LIMIT 20"
+        txns = [_pnl(_row(r)) for r in conn.execute(
+            "SELECT t.*, p.entry_price FROM paper_transactions t"
+            " LEFT JOIN positions p ON p.id = t.position_id ORDER BY t.id DESC LIMIT 20"
+        )]
+        reads = [dict(r, **json.loads(r["payload"])) for r in conn.execute(
+            "SELECT ticker, as_of, failed, payload FROM extractions"
+            " WHERE failed = 0 ORDER BY id DESC LIMIT 15"
         )]
     return templates.TemplateResponse(request, "dashboard.html", {
         "jobs": jobs, "collector": collector, "corpus_total": corpus_total,
         "positions": positions, "results": results, "llm": llm,
-        "paper": paper.snapshot(), "txns": txns,
+        "paper": paper.snapshot(), "txns": txns, "reads": reads,
     })
 
 
@@ -106,3 +114,12 @@ def run_now(name: str):
 
 def _row(row) -> dict | None:
     return dict(row) if row is not None else None
+
+
+def _pnl(txn: dict) -> dict:
+    """Realized P&L on a sell — cash always rises on a sell, so colour by this instead."""
+    if txn["side"] == "sell" and txn.get("entry_price"):
+        txn["pnl"] = (txn["price"] - txn["entry_price"]) * txn["qty"] - txn["txn_cost"]
+    else:
+        txn["pnl"] = None
+    return txn

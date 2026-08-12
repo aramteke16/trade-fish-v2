@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from tradefish import config, db
 from tradefish.broker import paper
 from tradefish.data import prices
+from tradefish.llm import features
 from tradefish.model import baseline
 
 logger = logging.getLogger(__name__)
@@ -22,12 +23,18 @@ def run() -> str:
     symbols = config.universe()
     hist = prices.history(symbols)
     feats = {s: f for s, df in hist.items() if (f := baseline.features(df))}
-    ranked = baseline.rank(feats)
+
+    monday = (date.today() - timedelta(days=date.today().weekday())).isoformat()
+    llm_weight = float(config.strategy("llm_weight"))
+    # only news disclosed before this morning's decision (plan §3 point-in-time)
+    llm = features.signals(since=(date.today() - timedelta(days=7)).isoformat())
+    logger.info("llm signals for %d names, weight %.2f", len(llm), llm_weight)
+
+    ranked = baseline.rank(feats, llm, llm_weight)
     if not ranked:
         raise RuntimeError(f"no scorable names ({len(hist)}/{len(symbols)} with prices)")
 
     top_k = config.strategy("top_k")
-    monday = (date.today() - timedelta(days=date.today().weekday())).isoformat()
     budget = paper.cash() * 0.99 / top_k  # 1% buffer for charges
     bought = 0
     # walk down the ranking so unaffordable names don't leave slots empty
@@ -40,6 +47,9 @@ def run() -> str:
             logger.info("%s skipped — share price %.2f over slot budget %.2f",
                         symbol, price, budget)
             continue
+        logger.info("pick #%d %s score %.2f llm %.2f", bought + 1, symbol, score,
+                    llm.get(symbol, 0.0))
         paper.buy(symbol, price, qty, monday, reason="entry")
         bought += 1
-    return f"scored {len(feats)}/{len(symbols)}, bought {bought}/{top_k}"
+    return (f"scored {len(feats)}/{len(symbols)}, {len(llm)} with news,"
+            f" bought {bought}/{top_k}")

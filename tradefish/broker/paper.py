@@ -74,17 +74,19 @@ def sell(position_id: int, price: float, reason: str = "manual") -> dict:
 
 def snapshot() -> dict:
     with db.connect() as conn:
-        invested = conn.execute(
-            "SELECT COALESCE(SUM(qty * entry_price), 0) FROM positions"
-            " WHERE status = 'open' AND qty IS NOT NULL"
-        ).fetchone()[0]
+        holdings = [dict(r) for r in conn.execute(
+            "SELECT p.qty, p.entry_price, q.price, q.ts FROM positions p"
+            " LEFT JOIN quotes q ON q.ticker = p.ticker"
+            " WHERE p.status = 'open' AND p.qty IS NOT NULL"
+        )]
         fees = conn.execute(
             "SELECT COALESCE(SUM(txn_cost), 0) FROM paper_transactions"
         ).fetchone()[0]
-        open_count = conn.execute(
-            "SELECT COUNT(*) FROM positions WHERE status = 'open'"
-        ).fetchone()[0]
+    invested = sum(h["qty"] * h["entry_price"] for h in holdings)
+    # last cached quote per name; falls back to entry price when never quoted
+    market = sum(h["qty"] * (h["price"] or h["entry_price"]) for h in holdings)
+    quoted = [h["ts"] for h in holdings if h["ts"]]
     cap, c = capital(), cash()
-    # holdings valued at entry until the live price feed lands
-    return {"capital": cap, "cash": c, "invested": invested, "fees": fees,
-            "open_count": open_count, "net": c + invested - cap}
+    return {"capital": cap, "cash": c, "invested": invested, "market": market,
+            "unrealized": market - invested, "fees": fees, "open_count": len(holdings),
+            "net": c + market - cap, "quote_ts": max(quoted) if quoted else None}

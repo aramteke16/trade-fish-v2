@@ -41,14 +41,36 @@
   </div>
 </section>
 
+<section class="panel">
+  <h2>what the llm read</h2>
+  {% if reads %}
+  <table>
+    <tr><th>ticker</th><th>catalyst</th><th>sentiment</th><th>surprise</th>
+        <th>magnitude</th><th>evidence</th></tr>
+    {% for r in reads %}
+    <tr><td>{{ r.ticker }}</td><td>{{ r.catalyst }}</td>
+        <td class="{{ 'gain' if r.sentiment > 0 else ('loss' if r.sentiment < 0 else '') }}">{{ r.sentiment }}</td>
+        <td>{{ r.surprise }}</td><td>{{ r.magnitude }}</td>
+        <td class="muted">{{ r.evidence }}</td></tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">nothing scored yet — daily_extract runs 19:30 IST</p>{% endif %}
+</section>
+
 <h2>paper account</h2>
 <section class="row">
   <div class="panel">
     <p>starting capital: <b>₹{{ "%.0f"|format(paper.capital) }}</b></p>
     <p>cash: ₹{{ "%.2f"|format(paper.cash) }}</p>
-    <p>invested (at entry): ₹{{ "%.2f"|format(paper.invested) }}</p>
+    <p>holdings at market: ₹{{ "%.2f"|format(paper.market) }}
+      <span class="muted">(cost ₹{{ "%.2f"|format(paper.invested) }})</span></p>
+    <p class="{{ 'gain' if paper.unrealized >= 0 else 'loss' }}">
+      unrealized: ₹{{ "%+.2f"|format(paper.unrealized) }}</p>
     <p>charges paid: ₹{{ "%.2f"|format(paper.fees) }}</p>
-    <p class="{{ 'gain' if paper.net >= 0 else 'loss' }}">net: ₹{{ "%+.2f"|format(paper.net) }}</p>
+    <p class="{{ 'gain' if paper.net >= 0 else 'loss' }}">
+      net: ₹{{ "%+.2f"|format(paper.net) }}
+      <span class="muted">({{ "%+.2f"|format(paper.net / paper.capital * 100) }}%)</span></p>
+    <p class="muted">prices as of {{ paper.quote_ts | ist if paper.quote_ts else "no quotes yet" }}</p>
   </div>
   <div class="panel">
     <h3>manual trade <span class="muted">(test the ledger — weekly_score will trade automatically)</span></h3>
@@ -66,10 +88,17 @@
   <h2>open positions</h2>
   {% if positions %}
   <table>
-    <tr><th>ticker</th><th>qty</th><th>entry</th><th>weight</th><th>sell at</th></tr>
+    <tr><th>ticker</th><th>qty</th><th>entry</th><th>last</th><th>move</th>
+        <th>unrealized</th><th>sell at</th></tr>
     {% for p in positions %}
-    <tr><td>{{ p.ticker }}</td><td>{{ p.qty or "—" }}</td><td>{{ p.entry_price }}</td>
-        <td>{{ "%.1f%%"|format(p.weight * 100) }}</td>
+    {% set move = (p.last_price / p.entry_price - 1) if p.last_price and p.entry_price else None %}
+    <tr><td>{{ p.ticker }}</td><td>{{ p.qty or "—" }}</td>
+        <td>{{ "%.2f"|format(p.entry_price) }}</td>
+        <td>{{ "%.2f"|format(p.last_price) if p.last_price else "—" }}</td>
+        <td class="{{ 'gain' if move and move > 0 else ('loss' if move and move < 0 else '') }}">
+          {{ "%+.2f%%"|format(move * 100) if move is not none else "—" }}</td>
+        <td class="{{ 'gain' if move and move > 0 else ('loss' if move and move < 0 else '') }}">
+          {{ "%+.2f"|format((p.last_price - p.entry_price) * p.qty) if move is not none else "—" }}</td>
         <td><form method="post" action="/paper/sell/{{ p.id }}" class="trade-form">
           <input name="price" type="number" step="0.05" min="0.05" placeholder="price ₹" required>
           <button>sell</button></form></td></tr>
@@ -83,12 +112,14 @@
   {% if txns %}
   <table>
     <tr><th>time</th><th>side</th><th>ticker</th><th>qty</th><th>price</th>
-        <th>value</th><th>charges</th><th>cash Δ</th><th>reason</th></tr>
+        <th>value</th><th>charges</th><th>cash Δ</th><th>P&amp;L</th><th>reason</th></tr>
     {% for t in txns %}
     <tr><td class="muted">{{ t.ts | ist }}</td><td class="side-{{ t.side }}">{{ t.side }}</td>
-        <td>{{ t.ticker }}</td><td>{{ "%.0f"|format(t.qty) }}</td><td>{{ t.price }}</td>
+        <td>{{ t.ticker }}</td><td>{{ "%.0f"|format(t.qty) }}</td><td>{{ "%.2f"|format(t.price) }}</td>
         <td>{{ "%.2f"|format(t.gross_value) }}</td><td>{{ "%.2f"|format(t.txn_cost) }}</td>
-        <td class="{{ 'gain' if t.cash_delta >= 0 else 'loss' }}">{{ "%+.2f"|format(t.cash_delta) }}</td>
+        <td class="muted">{{ "%+.2f"|format(t.cash_delta) }}</td>
+        <td class="{{ 'gain' if t.pnl and t.pnl > 0 else ('loss' if t.pnl and t.pnl < 0 else '') }}">
+          {{ "%+.2f"|format(t.pnl) if t.pnl is not none else "—" }}</td>
         <td class="muted">{{ t.reason }}</td></tr>
     {% endfor %}
   </table>
