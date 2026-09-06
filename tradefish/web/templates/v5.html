@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+{% block head %}<meta http-equiv="refresh" content="60">{% endblock %}
+{% block content %}
+
+<h2>algo v5 — momentum club</h2>
+<section class="cards">
+  <div class="card">
+    <h3>account</h3>
+    <p>total: ₹{{ '%.0f' | format(paper.cash + paper.market) }}</p>
+    <p class="muted">cash ₹{{ '%.0f' | format(paper.cash) }} · invested ₹{{ '%.0f' | format(paper.market) }}</p>
+    <p class="{{ 'gain' if paper.net > 0 else ('loss' if paper.net < 0 else '') }}">
+      net {{ '%+.0f' | format(paper.net) }} ({{ '%+.1f' | format(paper.net / paper.capital * 100) }}%)</p>
+    <p class="muted">fees paid ₹{{ '%.0f' | format(paper.fees) }}</p>
+  </div>
+  <div class="card">
+    <h3>book</h3>
+    <p>{{ paper.open_count }} / 12 slots</p>
+    <p class="muted">universe: {{ universe_n }} names</p>
+    <form method="post" action="/v5/universe/rebuild"><button>rebuild universe</button></form>
+  </div>
+  <div class="card">
+    <h3>last cycle</h3>
+    {% if job %}
+      <p class="status status-{{ job.status }}">{{ job.status }}</p>
+      <p class="muted">{{ job.started_at | ist }} IST</p>
+      {% if job.detail %}<p class="detail">{{ job.detail }}</p>{% endif %}
+      {% if job.error %}<p class="error">{{ job.error }}</p>{% endif %}
+    {% else %}<p class="muted">never ran</p>{% endif %}
+    <form method="post" action="/v5/cycle/run"><button>run cycle now</button></form>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="chart-head">
+    <h2>growth of ₹{{ '{:,.0f}'.format(paper.capital) }}</h2>
+    <span class="legend">
+      <span class="key"><span class="swatch" style="background:#8b5cf6"></span>v5 portfolio</span>
+      <span class="key"><span class="swatch dash"></span>nifty 50</span>
+    </span>
+  </div>
+  <div id="equity-chart" class="chart"></div>
+  <p class="muted" id="equity-caption">both indexed to 100 at start, so one scale carries both</p>
+</section>
+
+<section class="panel">
+  <div class="chart-head">
+    <h2>profit &amp; loss</h2>
+    <span class="toggle" id="pnl-toggle">
+      <button type="button" data-period="day">daily</button>
+      <button type="button" data-period="month" class="on">monthly</button>
+      <button type="button" data-period="year">yearly</button>
+    </span>
+  </div>
+  <div id="pnl-chart" class="chart"></div>
+  <table id="pnl-table" class="pnl-table"></table>
+</section>
+
+<section class="panel">
+  <h2>holdings</h2>
+  {% if positions %}
+  <table>
+    <tr><th>ticker</th><th>qty</th><th>entry</th><th>last</th><th>value</th><th>p&l</th><th>since</th></tr>
+    {% for p in positions %}
+    <tr>
+      <td>{{ p.ticker }}</td><td>{{ '%.0f' | format(p.qty or 0) }}</td>
+      <td>{{ '%.2f' | format(p.entry_price) }}</td>
+      <td>{{ '%.2f' | format(p.last_price or p.entry_price) }}</td>
+      <td>₹{{ '%.0f' | format(p.value) }}</td>
+      <td class="{{ 'gain' if p.pnl_pct > 0 else ('loss' if p.pnl_pct < 0 else '') }}">
+        {{ '%+.1f' | format(p.pnl_pct) }}%</td>
+      <td class="muted">{{ p.week_start }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">no open positions — the cycle runs on the 1st of the month</p>{% endif %}
+</section>
+
+<section class="panel">
+  <h2>cycle history</h2>
+  {% if cycles %}
+  <table>
+    <tr><th>date</th><th>gate</th><th>club size</th><th>sold</th><th>bought</th><th>detail</th></tr>
+    {% for c in cycles %}
+    <tr>
+      <td>{{ c.cycle_date }}</td>
+      <td class="{{ 'gain' if c.gate_open else 'loss' }}">
+        {{ 'open' if c.gate_open else 'closed' }}{{ ' · storm' if c.storm else '' }}</td>
+      <td>{{ c.members }}</td><td>{{ c.sold }}</td><td>{{ c.bought }}</td>
+      <td class="muted">{{ c.detail }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">no cycles yet</p>{% endif %}
+</section>
+
+<section class="panel">
+  <h2>trades</h2>
+  {% if txns %}
+  <table>
+    <tr><th>when</th><th>ticker</th><th>side</th><th>qty</th><th>price</th><th>cost</th><th>reason</th><th>p&l</th></tr>
+    {% for t in txns %}
+    <tr>
+      <td class="muted">{{ t.ts | ist }}</td><td>{{ t.ticker }}</td>
+      <td class="side-{{ t.side }}">{{ t.side }}</td>
+      <td>{{ '%.0f' | format(t.qty) }}</td><td>{{ '%.2f' | format(t.price) }}</td>
+      <td class="muted">₹{{ '%.1f' | format(t.txn_cost) }}</td>
+      <td class="muted">{{ t.reason }}</td>
+      <td class="{{ 'gain' if t.pnl and t.pnl > 0 else ('loss' if t.pnl and t.pnl < 0 else '') }}">
+        {{ '%+.0f' | format(t.pnl) if t.pnl is not none else '' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}<p class="muted">no trades yet</p>{% endif %}
+</section>
+
+<p class="muted">rules: <code>docs/algo-v5.md</code> — 12 slots, club =
+  12-1 momentum &gt; 0 and price above its own 200-day average; sell on club exit; buy only
+  when NIFTY &gt; 50dma, half size when NIFTY volatility is in its top decile.</p>
+
+<script id="v5-data" type="application/json">{{ chart | tojson }}</script>
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById('v5-data').textContent);
+  const NS = 'http://www.w3.org/2000/svg';
+  const INK = '#d8d8e0', MUTED = '#6b6b7b', GRID = '#262336';
+  const PORTFOLIO = '#8b5cf6', BENCH = '#8a8a9a', UP = '#0d9488', DOWN = '#e05252';
+  const money = v => (v < 0 ? '−₹' : '₹') + Math.abs(Math.round(v)).toLocaleString('en-IN');
+  const signed = v => (v >= 0 ? '+' : '') + money(v);
+  const el = (tag, attrs = {}) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    return n;
+  };
+
+  function empty(host, msg) {
+    host.innerHTML = `<p class="muted">${msg}</p>`;
+  }
+
+  function tooltip(host) {
+    const tip = document.createElement('div');
+    tip.className = 'tip';
+    tip.hidden = true;
+    host.appendChild(tip);
+    return {
+      show(html, x, y) {
+        tip.innerHTML = html;
+        tip.hidden = false;
+        const box = host.getBoundingClientRect();
+        tip.style.left = Math.min(Math.max(x, 8), box.width - tip.offsetWidth - 8) + 'px';
+        tip.style.top = Math.max(y - tip.offsetHeight - 12, 4) + 'px';
+      },
+      hide() { tip.hidden = true; },
+    };
+  }
+
+  function drawEquity() {
+    const host = document.getElementById('equity-chart');
+    const pts = data.equity || [];
+    if (pts.length < 2) return empty(host, 'not enough marks yet — v5_mark runs 15:45 IST on weekdays');
+    host.innerHTML = '';
+    const W = 900, H = 260, L = 52, R = 12, T = 12, B = 26;
+    const series = [{ key: 'portfolio', color: PORTFOLIO, dash: null },
+                    { key: 'nifty', color: BENCH, dash: '5 4' }];
+    const all = pts.flatMap(p => series.map(s => p[s.key]).filter(v => v != null));
+    const lo = Math.min(100, ...all), hi = Math.max(100, ...all);
+    const pad = (hi - lo) * 0.08 || 1;
+    const yMin = lo - pad, yMax = hi + pad;
+    const x = i => L + i * (W - L - R) / (pts.length - 1);
+    const y = v => T + (yMax - v) / (yMax - yMin) * (H - T - B);
+
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, class: 'plot',
+                            preserveAspectRatio: 'none', role: 'img',
+                            'aria-label': 'portfolio value versus nifty, indexed to 100' });
+    for (let g = 0; g <= 4; g++) {
+      const v = yMin + (yMax - yMin) * g / 4;
+      svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v),
+                                   stroke: GRID, 'stroke-width': 1 }));
+      const t = el('text', { x: L - 8, y: y(v) + 4, fill: MUTED, 'font-size': 11,
+                             'text-anchor': 'end' });
+      t.textContent = v.toFixed(0);
+      svg.appendChild(t);
+    }
+    svg.appendChild(el('line', { x1: L, x2: W - R, y1: y(100), y2: y(100),
+                                 stroke: MUTED, 'stroke-width': 1, 'stroke-dasharray': '2 3' }));
+    for (const s of series) {
+      const seg = pts.map((p, i) => p[s.key] == null ? null : `${x(i)},${y(p[s.key])}`)
+                     .filter(Boolean);
+      if (seg.length < 2) continue;
+      const line = el('polyline', { points: seg.join(' '), fill: 'none', stroke: s.color,
+                                    'stroke-width': 2, 'stroke-linejoin': 'round',
+                                    'vector-effect': 'non-scaling-stroke' });
+      if (s.dash) line.setAttribute('stroke-dasharray', s.dash);
+      svg.appendChild(line);
+    }
+    const first = el('text', { x: L, y: H - 8, fill: MUTED, 'font-size': 11 });
+    first.textContent = pts[0].day;
+    const last = el('text', { x: W - R, y: H - 8, fill: MUTED, 'font-size': 11,
+                              'text-anchor': 'end' });
+    last.textContent = pts[pts.length - 1].day;
+    svg.appendChild(first); svg.appendChild(last);
+
+    const cross = el('line', { y1: T, y2: H - B, stroke: MUTED, 'stroke-width': 1,
+                               'stroke-dasharray': '3 3', opacity: 0 });
+    const dotP = el('circle', { r: 4, fill: PORTFOLIO, stroke: '#12121a',
+                                'stroke-width': 2, opacity: 0 });
+    const dotN = el('circle', { r: 4, fill: BENCH, stroke: '#12121a',
+                                'stroke-width': 2, opacity: 0 });
+    svg.appendChild(cross); svg.appendChild(dotP); svg.appendChild(dotN);
+    host.appendChild(svg);
+    const tip = tooltip(host);
+
+    svg.addEventListener('pointermove', ev => {
+      const box = svg.getBoundingClientRect();
+      const i = Math.round((ev.clientX - box.left) / box.width * (pts.length - 1));
+      const p = pts[Math.max(0, Math.min(pts.length - 1, i))];
+      if (!p) return;
+      const px = x(pts.indexOf(p));
+      cross.setAttribute('x1', px); cross.setAttribute('x2', px);
+      cross.setAttribute('opacity', 1);
+      dotP.setAttribute('cx', px); dotP.setAttribute('cy', y(p.portfolio));
+      dotP.setAttribute('opacity', 1);
+      if (p.nifty != null) {
+        dotN.setAttribute('cx', px); dotN.setAttribute('cy', y(p.nifty));
+        dotN.setAttribute('opacity', 1);
+      } else dotN.setAttribute('opacity', 0);
+      tip.show(
+        `<b>${p.day}</b><br>portfolio ${p.portfolio.toFixed(1)}` +
+        (p.nifty != null ? `<br>nifty ${p.nifty.toFixed(1)}` : ''),
+        ev.clientX - box.left, ev.clientY - box.top);
+    });
+    svg.addEventListener('pointerleave', () => {
+      cross.setAttribute('opacity', 0);
+      dotP.setAttribute('opacity', 0); dotN.setAttribute('opacity', 0);
+      tip.hide();
+    });
+  }
+
+  function drawPnl(period) {
+    const host = document.getElementById('pnl-chart');
+    const table = document.getElementById('pnl-table');
+    const rows = (data.pnl || {})[period] || [];
+    if (!rows.length) {
+      empty(host, 'no marks yet for this period');
+      table.innerHTML = '';
+      return;
+    }
+    host.innerHTML = '';
+    const W = 900, H = 220, L = 62, R = 12, T = 14, B = 30;
+    const mags = rows.map(r => Math.abs(r.pnl));
+    const max = Math.max(...mags, 1);
+    const zero = T + (H - T - B) / 2;
+    const half = (H - T - B) / 2;
+    const slot = (W - L - R) / rows.length;
+    const barW = Math.max(3, Math.min(46, slot - 6));  // 2px+ surface gap between bars
+
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, class: 'plot',
+                            preserveAspectRatio: 'none', role: 'img',
+                            'aria-label': `profit and loss per ${period}` });
+    for (const frac of [1, 0.5, -0.5, -1]) {
+      const yy = zero - frac * half;
+      svg.appendChild(el('line', { x1: L, x2: W - R, y1: yy, y2: yy,
+                                   stroke: GRID, 'stroke-width': 1 }));
+      const t = el('text', { x: L - 8, y: yy + 4, fill: MUTED, 'font-size': 11,
+                             'text-anchor': 'end' });
+      t.textContent = signed(frac * max);
+      svg.appendChild(t);
+    }
+    svg.appendChild(el('line', { x1: L, x2: W - R, y1: zero, y2: zero,
+                                 stroke: MUTED, 'stroke-width': 1 }));
+
+    rows.forEach((r, i) => {
+      const h = Math.abs(r.pnl) / max * half;
+      const cx = L + slot * i + slot / 2;
+      const up = r.pnl >= 0;
+      const bar = el('rect', {
+        x: cx - barW / 2, y: up ? zero - h : zero, width: barW,
+        height: Math.max(h, 1), rx: 3, fill: up ? UP : DOWN,
+      });
+      bar.style.cursor = 'crosshair';
+      svg.appendChild(bar);
+      if (rows.length <= 14) {  // selective labels only — never a number on every bar
+        const t = el('text', { x: cx, y: up ? zero - h - 6 : zero + h + 14,
+                               fill: MUTED, 'font-size': 11, 'text-anchor': 'middle' });
+        t.textContent = signed(r.pnl);
+        svg.appendChild(t);
+      }
+      if (rows.length <= 14 || i % Math.ceil(rows.length / 8) === 0) {
+        const lbl = el('text', { x: cx, y: H - 8, fill: MUTED, 'font-size': 11,
+                                 'text-anchor': 'middle' });
+        lbl.textContent = r.label.length > 7 ? r.label.slice(5) : r.label;
+        svg.appendChild(lbl);
+      }
+      bar.addEventListener('pointerenter', ev => {
+        const box = svg.getBoundingClientRect();
+        tip.show(`<b>${r.label}</b><br>${signed(r.pnl)}` +
+                 ` (${r.pct >= 0 ? '+' : ''}${r.pct.toFixed(2)}%)<br>` +
+                 `<span class="muted">closed at ${money(r.value)}</span>`,
+                 ev.clientX - box.left, ev.clientY - box.top);
+      });
+      bar.addEventListener('pointerleave', () => tip.hide());
+    });
+    host.appendChild(svg);
+    const tip = tooltip(host);
+
+    const head = '<tr><th>period</th><th>p&l</th><th>%</th><th>closing value</th></tr>';
+    table.innerHTML = head + rows.slice().reverse().map(r =>
+      `<tr><td>${r.label}</td>` +
+      `<td class="${r.pnl >= 0 ? 'gain' : 'loss'}">${signed(r.pnl)}</td>` +
+      `<td class="${r.pnl >= 0 ? 'gain' : 'loss'}">${r.pct >= 0 ? '+' : ''}${r.pct.toFixed(2)}%</td>` +
+      `<td>${money(r.value)}</td></tr>`).join('');
+  }
+
+  drawEquity();
+  drawPnl('month');
+  document.getElementById('pnl-toggle').addEventListener('click', ev => {
+    const btn = ev.target.closest('button[data-period]');
+    if (!btn) return;
+    for (const b of ev.currentTarget.querySelectorAll('button')) b.classList.remove('on');
+    btn.classList.add('on');
+    drawPnl(btn.dataset.period);
+  });
+})();
+</script>
+{% endblock %}

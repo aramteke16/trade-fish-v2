@@ -1,0 +1,18 @@
+# Static sector universe — chosen by 5-year performance (Aug-2021 -> Aug-2026)
+# Measured on our own price data: median 5y return of liquid NSE stocks per sector.
+# Stock selection is NOT in this file — the algo picks stocks dynamically at runtime
+# by momentum within these sectors.
+#
+# sector            median 5y   mean 5y   stocks measured
+# Energy               +169%      +317%       21
+# Utilities            +150%      +192%       19
+# Industrials          +142%      +375%      186
+# Real Estate          +120%      +190%       26
+# Financial Services   +105%      +178%       99
+# (cut line — below: Consumer Cyclical +92%, Healthcare +78%, Consumer Defensive +55%,
+#  Basic Materials +52%, Technology +47%, Communication Services +26%)
+Energy
+Utilities
+Industrials
+Real Estate
+Financial Services

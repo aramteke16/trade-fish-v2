@@ -107,6 +107,31 @@ CREATE TABLE IF NOT EXISTS audit_log (
     old_value TEXT,
     new_value TEXT
 );
+
+CREATE TABLE IF NOT EXISTS v5_equity (
+    day TEXT PRIMARY KEY,
+    cash REAL NOT NULL,
+    market REAL NOT NULL,             -- holdings marked to last quote
+    total REAL NOT NULL,
+    open_count INTEGER NOT NULL,
+    nifty REAL
+);
+
+CREATE TABLE IF NOT EXISTS v5_universe (
+    symbol TEXT PRIMARY KEY,
+    built_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS v5_cycles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cycle_date TEXT NOT NULL,
+    gate_open INTEGER NOT NULL,
+    storm INTEGER NOT NULL,
+    members INTEGER NOT NULL,         -- club size that month
+    sold INTEGER NOT NULL,
+    bought INTEGER NOT NULL,
+    detail TEXT
+);
 """
 
 
@@ -125,10 +150,13 @@ def init_db() -> None:
     db_path().parent.mkdir(parents=True, exist_ok=True)
     with connect() as conn:
         conn.executescript(SCHEMA)
-        try:  # older DBs predate the qty column
-            conn.execute("ALTER TABLE positions ADD COLUMN qty REAL")
-        except sqlite3.OperationalError:
-            pass
+        for column, ddl in (("qty", "ALTER TABLE positions ADD COLUMN qty REAL"),
+                            ("strategy", "ALTER TABLE positions ADD COLUMN strategy TEXT"
+                                         " NOT NULL DEFAULT 'weekly'")):
+            try:  # older DBs predate these columns
+                conn.execute(ddl)
+            except sqlite3.OperationalError:
+                pass
     logger.info("db ready: %s", db_path())
 
 

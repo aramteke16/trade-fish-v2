@@ -7,34 +7,39 @@ friday_exit will call buy()/sell() once the price feed lands.
 
 import logging
 
-from tradefish import config, db
-from tradefish.backtest import costs
+from tradefish import config, costs, db
 
 logger = logging.getLogger(__name__)
 
 
-def capital() -> float:
-    return float(config.strategy("paper_capital"))
+def capital(strategy: str = "weekly") -> float:
+    key = "v5_capital" if strategy == "v5" else "paper_capital"
+    return float(config.strategy(key))
 
 
-def cash() -> float:
+def cash(strategy: str = "weekly") -> float:
+    """Cash for one book — the two strategies never share a wallet."""
     with db.connect() as conn:
         delta = conn.execute(
-            "SELECT COALESCE(SUM(cash_delta), 0) FROM paper_transactions"
+            "SELECT COALESCE(SUM(t.cash_delta), 0) FROM paper_transactions t"
+            " LEFT JOIN positions p ON p.id = t.position_id"
+            " WHERE COALESCE(p.strategy, 'weekly') = ?", (strategy,)
         ).fetchone()[0]
-    return capital() + delta
+    return capital(strategy) + delta
 
 
-def buy(ticker: str, price: float, qty: int, week_start: str, reason: str = "entry") -> dict:
+def buy(ticker: str, price: float, qty: int, week_start: str, reason: str = "entry",
+        strategy: str = "weekly") -> dict:
     value = qty * price
     charge = costs.side_cost(value, "buy")
-    if value + charge > cash():
-        raise ValueError(f"insufficient cash: need ₹{value + charge:.2f}, have ₹{cash():.2f}")
+    available = cash(strategy)
+    if value + charge > available:
+        raise ValueError(f"insufficient cash: need ₹{value + charge:.2f}, have ₹{available:.2f}")
     with db.connect() as conn:
         cur = conn.execute(
-            "INSERT INTO positions (week_start, ticker, weight, qty, entry_price, status)"
-            " VALUES (?, ?, ?, ?, ?, 'open')",
-            (week_start, ticker, value / capital(), qty, price),
+            "INSERT INTO positions (week_start, ticker, weight, qty, entry_price, status,"
+            " strategy) VALUES (?, ?, ?, ?, ?, 'open', ?)",
+            (week_start, ticker, value / capital(strategy), qty, price, strategy),
         )
         conn.execute(
             "INSERT INTO paper_transactions (ts, ticker, side, qty, price, gross_value,"
@@ -42,8 +47,8 @@ def buy(ticker: str, price: float, qty: int, week_start: str, reason: str = "ent
             (db.now(), ticker, qty, price, value, charge, -(value + charge), reason, cur.lastrowid),
         )
         position_id = cur.lastrowid
-    logger.info("paper buy %s x%d @ %.2f — charges %.2f, cash left %.2f",
-                ticker, qty, price, charge, cash())
+    logger.info("[%s] paper buy %s x%d @ %.2f — charges %.2f, cash left %.2f",
+                strategy, ticker, qty, price, charge, cash(strategy))
     return {"position_id": position_id, "value": value, "charge": charge}
 
 
@@ -72,21 +77,24 @@ def sell(position_id: int, price: float, reason: str = "manual") -> dict:
     return {"position_id": position_id, "proceeds": proceeds, "charge": charge}
 
 
-def snapshot() -> dict:
+def snapshot(strategy: str = "weekly") -> dict:
     with db.connect() as conn:
         holdings = [dict(r) for r in conn.execute(
             "SELECT p.qty, p.entry_price, q.price, q.ts FROM positions p"
             " LEFT JOIN quotes q ON q.ticker = p.ticker"
             " WHERE p.status = 'open' AND p.qty IS NOT NULL"
+            " AND COALESCE(p.strategy, 'weekly') = ?", (strategy,)
         )]
         fees = conn.execute(
-            "SELECT COALESCE(SUM(txn_cost), 0) FROM paper_transactions"
+            "SELECT COALESCE(SUM(t.txn_cost), 0) FROM paper_transactions t"
+            " LEFT JOIN positions p ON p.id = t.position_id"
+            " WHERE COALESCE(p.strategy, 'weekly') = ?", (strategy,)
         ).fetchone()[0]
     invested = sum(h["qty"] * h["entry_price"] for h in holdings)
     # last cached quote per name; falls back to entry price when never quoted
     market = sum(h["qty"] * (h["price"] or h["entry_price"]) for h in holdings)
     quoted = [h["ts"] for h in holdings if h["ts"]]
-    cap, c = capital(), cash()
+    cap, c = capital(strategy), cash(strategy)
     return {"capital": cap, "cash": c, "invested": invested, "market": market,
             "unrealized": market - invested, "fees": fees, "open_count": len(holdings),
             "net": c + market - cap, "quote_ts": max(quoted) if quoted else None}

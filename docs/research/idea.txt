@@ -1,0 +1,46 @@
+got it for now keep it at side, and refine the universe more. okay now we have the stock data for each of the sector, what we can do is, we will pick best known stock and check if in past 5 yeas (for old stock /mid size) and 3-1(years for small cap) if that stock incresed, then we will keep it in our uniiverser, but only run this before 2026 till dev 2025, but first remove all the psu and focus more on the pharma, chemical,  healthcare, electric vehicle, 
+TODOs:
+
+## 1. Exit rules — volatility-scaled (replaces fixed +6% / −3%)
+
+The old fixed barriers were calibrated for large-cap volatility and are far too tight for
+mid/small caps. Measured: the median weekly dip of our picks was **−3.08%**, sitting exactly on
+the −3% stop, so over half of all positions were stopped out by ordinary noise.
+
+```
+sigma_week = sigma_daily(trailing 60 days) x sqrt(5)
+
+target = max(5.3%, 1.5 x sigma_week)
+stop   = 1.0 x sigma_week
+max hold = 4 weeks
+```
+
+- **Target floor of 5.3%** comes from the rule below: never target less than 10x the round-trip cost.
+- **Hold winners across weeks.** A stock still in the top 6 on Monday is kept, not sold Friday
+  and rebought — that round trip is pure cost for no change of opinion.
+- Expected time to travel k sigmas is `5 x k²` trading days, so a 1.5σ target implies ~2 weeks
+  and the 4-week cap is the backstop, not the plan.
+
+### The 10x cost rule
+**Target must be at least 10x the round-trip cost**, so fees cannot decide the outcome of a trade.
+At 0.53% cost that is a 5.3% minimum target.
+
+### What exits cannot do
+Any target/stop pair is break-even against random prices: 1.5σ/1.0σ wins 40% of the time,
+`0.4 x 1.5 − 0.6 x 1.0 = 0`. The old 6%/−3% wins 33%, also zero. **Exit rules cannot create
+profit** — they only control trade shape and how often fees are paid. Profit must come from
+the entry signal.
+
+
+
+2. need to add the market sentiment section for the exit and entry 
+
+3. change the momentum look min = 1 years, holding period = dynamic based on the exit criterio
+
+4. Also relevant: momentum in India is driven partly by P/E, P/B and net FII inflows — not price alone. need to include this in the momentum 
+
+5. move the trade day to wednesday 
+
+6. once we enter the stock and diff between the exit and entry day is > half and stock is in loss, we can add more money to it. 
+
+7. but the real question is still remain the same, when to enter????? 
