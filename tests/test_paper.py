@@ -2,8 +2,7 @@
 
 import pytest
 
-from tradefish import db
-from tradefish.backtest import costs
+from tradefish import costs, db
 from tradefish.broker import paper
 
 

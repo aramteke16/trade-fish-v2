@@ -3,7 +3,7 @@
 import logging
 from datetime import date, timedelta
 
-from tradefish import config, db
+from tradefish import config, db, strategy
 from tradefish.broker import paper
 from tradefish.data import prices
 from tradefish.llm import features
@@ -23,6 +23,8 @@ def run() -> str:
     symbols = config.universe()
     hist = prices.history(symbols)
     feats = {s: f for s, df in hist.items() if (f := baseline.features(df))}
+    if not feats:
+        raise RuntimeError(f"no scorable names (0/{len(symbols)} with prices)")
 
     monday = (date.today() - timedelta(days=date.today().weekday())).isoformat()
     llm_weight = float(config.strategy("llm_weight"))
@@ -30,26 +32,13 @@ def run() -> str:
     llm = features.signals(since=(date.today() - timedelta(days=7)).isoformat())
     logger.info("llm signals for %d names, weight %.2f", len(llm), llm_weight)
 
-    ranked = baseline.rank(feats, llm, llm_weight)
-    if not ranked:
-        raise RuntimeError(f"no scorable names ({len(hist)}/{len(symbols)} with prices)")
-
+    entry_prices = {s: prices.latest(s) or float(df["close"].iloc[-1]) for s, df in hist.items()}
     top_k = config.strategy("top_k")
-    budget = paper.cash() * 0.99 / top_k  # 1% buffer for charges
-    bought = 0
-    # walk down the ranking so unaffordable names don't leave slots empty
-    for symbol, score in ranked:
-        if bought >= top_k:
-            break
-        price = prices.latest(symbol) or float(hist[symbol]["close"].iloc[-1])
-        qty = int(budget / price)
-        if qty < 1:
-            logger.info("%s skipped — share price %.2f over slot budget %.2f",
-                        symbol, price, budget)
-            continue
-        logger.info("pick #%d %s score %.2f llm %.2f", bought + 1, symbol, score,
-                    llm.get(symbol, 0.0))
-        paper.buy(symbol, price, qty, monday, reason="entry")
-        bought += 1
+    basket = strategy.pick_basket(feats, entry_prices, paper.cash(), top_k, llm, llm_weight)
+
+    for i, pick in enumerate(basket):
+        logger.info("pick #%d %s score %.2f llm %.2f", i + 1, pick["ticker"], pick["score"],
+                    llm.get(pick["ticker"], 0.0))
+        paper.buy(pick["ticker"], pick["price"], pick["qty"], monday, reason="entry")
     return (f"scored {len(feats)}/{len(symbols)}, {len(llm)} with news,"
-            f" bought {bought}/{top_k}")
+            f" bought {len(basket)}/{top_k}")

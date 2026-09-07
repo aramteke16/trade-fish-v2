@@ -1,4 +1,4 @@
-# strategy defaults (plan-v2.md §2) — runtime overrides come from the settings DB
+# strategy defaults (docs/plan-v2.md §2) — runtime overrides come from the settings DB
 universe:
   size: 150
   min_adv_crore: 5
@@ -13,6 +13,13 @@ strategy:
   embargo_weeks: 1
   paper_capital: 30000  # fake-money starting balance
   llm_weight: 0.3       # LLM share of the blended score; 0 = price-only baseline
+
+  # algo v5 — see docs/algo-v5.md. Values are validated; changing them invalidates
+  # the backtest evidence, so treat them as locked unless re-tested.
+  v5_capital: 30000     # separate fake-money book from the weekly strategy
+  v5_slots: 12          # breadth ceiling set by the flat DP fee at ~₹2,500/position
+  v5_corr_cap: 0.6      # skip candidates moving in lockstep with a holding
+  v5_vol_percentile: 0.90  # NIFTY vol above this ⇒ half-size new buys
 
 costs:
   brokerage_per_order_rs: 0
@@ -33,3 +40,5 @@ scheduler:
     monitor_exits: "*/5 9-15 * * mon-fri"   # barrier checks every 5 min
     friday_exit: "15 15 * * fri"
     weekend_report: "0 10 * * sat"
+    v5_cycle: "20 15 1-5 * *"         # monthly cycle, near close; retries to the 5th
+    v5_mark: "45 15 * * mon-fri"      # daily equity mark after close

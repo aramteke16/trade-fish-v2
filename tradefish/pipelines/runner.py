@@ -4,7 +4,8 @@ import logging
 
 from tradefish import db, log
 from tradefish.pipelines import (daily_collect, daily_extract, friday_exit,
-                                 monitor_exits, weekend_report, weekly_score)
+                                 monitor_exits, v5_cycle, v5_mark, weekend_report,
+                                 weekly_score)
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +16,8 @@ JOBS = {
     "monitor_exits": monitor_exits.run,
     "friday_exit": friday_exit.run,
     "weekend_report": weekend_report.run,
+    "v5_cycle": v5_cycle.run,
+    "v5_mark": v5_mark.run,
 }
 
 

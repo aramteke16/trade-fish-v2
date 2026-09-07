@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 from tradefish import config, db, log
-from tradefish.web.routes import auth, dashboard, settings
+from tradefish.web.routes import auth, dashboard, settings, v5
 
 
 @asynccontextmanager
@@ -41,3 +41,4 @@ app.mount("/static", StaticFiles(directory=Path(__file__).parent / "static"), na
 app.include_router(auth.router)
 app.include_router(dashboard.router)
 app.include_router(settings.router)
+app.include_router(v5.router)

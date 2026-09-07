@@ -2,8 +2,8 @@
 
 import pytest
 
-from tradefish.backtest.costs import round_trip_pct
-from tradefish.backtest.metrics import hit_rate, ic, max_drawdown
+from tradefish.costs import round_trip_pct
+from tradefish.metrics import hit_rate, ic, max_drawdown
 from tradefish.labels.triple_barrier import label
 from tradefish.model.splitter import walk_forward_splits
 

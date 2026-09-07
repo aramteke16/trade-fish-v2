@@ -8,6 +8,7 @@ WORKDIR /app
 COPY pyproject.toml ./
 COPY tradefish ./tradefish
 COPY config ./config
+COPY scripts ./scripts
 RUN pip install --no-cache-dir .
 
 # PYTHONPATH so templates/static resolve from /app, APP_ROOT so data/ lands in the volume

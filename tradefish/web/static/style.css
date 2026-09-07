@@ -67,3 +67,31 @@ input:focus { outline: none; border-color: #a78bfa; }
 .login-box { max-width: 320px; margin: 15vh auto; text-align: center; }
 .login-box h1 { color: #22c55e; margin-bottom: 20px; }
 .login-box input { max-width: none; text-align: center; }
+
+/* v5 charts */
+.chart-head { display: flex; align-items: baseline; justify-content: space-between;
+              gap: 12px; flex-wrap: wrap; }
+.chart-head h2 { margin: 0 0 10px; }
+.chart { position: relative; width: 100%; }
+.plot { width: 100%; height: 240px; display: block; touch-action: none; }
+#pnl-chart .plot { height: 210px; }
+
+.legend { display: flex; gap: 14px; font-size: 12px; color: #9a9aad; }
+.key { display: flex; align-items: center; gap: 6px; }
+.swatch { width: 12px; height: 3px; border-radius: 2px; display: inline-block; }
+.swatch.dash { background: repeating-linear-gradient(90deg, #8a8a9a 0 5px, transparent 5px 9px); }
+
+.toggle { display: flex; gap: 4px; }
+.toggle button { margin-top: 0; padding: 4px 12px; font-size: 12px;
+                 background: #12121a; color: #6b6b7b; border-color: #262336; }
+.toggle button:hover { background: #1a1a26; color: #d8d8e0; border-color: #3b3355; }
+.toggle button.on { background: #1e1b33; color: #a78bfa; border-color: #4c3f8a; }
+
+.tip { position: absolute; pointer-events: none; background: #1a1a26; color: #d8d8e0;
+       border: 1px solid #3b3355; border-radius: 4px; padding: 6px 9px; font-size: 12px;
+       line-height: 1.5; white-space: nowrap; z-index: 5; }
+
+.pnl-table { margin-top: 14px; }
+.pnl-table td:not(:first-child), .pnl-table th:not(:first-child) { text-align: right; }
+.gain { color: #34d399; }
+.loss { color: #f87171; }

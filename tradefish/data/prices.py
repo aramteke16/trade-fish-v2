@@ -36,6 +36,16 @@ def history(symbols: list[str], weeks: int = 30) -> dict[str, pd.DataFrame]:
     return out
 
 
+def index_history(symbol: str = "^NSEI", weeks: int = 60) -> pd.DataFrame:
+    """Daily OHLCV for an index — no '.NS' suffix, columns lowercased."""
+    df = yf.download(symbol, period=f"{weeks * 7}d", interval="1d",
+                     progress=False, auto_adjust=True)
+    if df.empty:
+        raise RuntimeError(f"no data for index {symbol}")
+    df.columns = [c[0].lower() if isinstance(c, tuple) else c.lower() for c in df.columns]
+    return df.dropna()
+
+
 def latest(symbol: str) -> float | None:
     """Near-live quote (delayed ~15 min on yfinance — fine for paper trading)."""
     try:
