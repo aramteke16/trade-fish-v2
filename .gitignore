@@ -1,16 +1,9 @@
-# env / secrets
-.env
-.venv/
-
-# runtime data (app.db holds secrets, raw/ and cache/ are bulky)
-# leading slash = root only, so the tradefish/data package is not ignored
-/data/
-
-# python
 __pycache__/
 *.pyc
-*.egg-info/
-.pytest_cache/
-
-# os / editor
 .DS_Store
+
+# Runtime files. The database itself is committed.
+data/assistant/*.log
+data/assistant/run.lock
+data/assistant/portfolio.db-wal
+data/assistant/portfolio.db-shm

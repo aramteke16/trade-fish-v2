@@ -1,8 +1,6 @@
-.venv
-/data
 .env
-__pycache__
-*.pyc
-.pytest_cache
-experiments
-tests
+data
+**/*.xlsx
+**/__pycache__
+**/*.pyc
+.git

@@ -1,9 +1,44 @@
+# One container for a DigitalOcean droplet.
+# The image command starts the page, the Friday 16:00 IST ticker, and /now.
+#
+# The page has no login. Port 8080 is bound to 127.0.0.1 on the droplet.
+# Open it with an SSH tunnel. Do not publish 8080 on the public firewall.
+#
+# The private repo holds .env and data/. On the droplet:
+#   git clone git@github.com:aramteke16/pharma-book.git
+#   cd pharma-book
+#   docker compose up -d --build
+# Later: git pull && docker compose up -d --build
+# From your laptop:
+#   ssh -L 8080:127.0.0.1:8080 user@DROPLET
+# Open http://127.0.0.1:8080
+#
+# Run the Telegram poller in this container only. A second poller on the
+# laptop fights it for the same bot.
+
 services:
-  tradefish:
+  app:
     build: .
-    ports:
-      - "8000:8000"   # public — plain HTTP, so use a long random ADMIN_PASSWORD
-    env_file: .env
+    init: true
+    env_file:
+      - .env
+    environment:
+      TZ: Asia/Kolkata
     volumes:
       - ./data:/app/data
+      - ./.env:/app/.env
+    ports:
+      - "127.0.0.1:8080:8080"
     restart: unless-stopped
+    stop_grace_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s

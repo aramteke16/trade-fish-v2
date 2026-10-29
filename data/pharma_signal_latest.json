@@ -1,0 +1,49 @@
+{
+  "decision_close": "2026-10-16",
+  "place_at": "next NSE open",
+  "orders_sent": false,
+  "equity_used": 1000000.0,
+  "book": [
+    {
+      "symbol": "MOREPENLAB",
+      "weight": 0.5672480562064648,
+      "target_shares": 4579,
+      "last_close": 123.87
+    },
+    {
+      "symbol": "PAR",
+      "weight": 0.07399127362786938,
+      "target_shares": 675,
+      "last_close": 109.53
+    },
+    {
+      "symbol": "INDSWFTLAB",
+      "weight": 0.35876067016566593,
+      "target_shares": 998,
+      "last_close": 359.25
+    }
+  ],
+  "orders": [
+    {
+      "side": "BUY",
+      "symbol": "INDSWFTLAB",
+      "shares": 998,
+      "last_close": 359.25,
+      "rupees_at_last_close": 358531.5
+    },
+    {
+      "side": "BUY",
+      "symbol": "MOREPENLAB",
+      "shares": 4579,
+      "last_close": 123.87,
+      "rupees_at_last_close": 567200.73
+    },
+    {
+      "side": "BUY",
+      "symbol": "PAR",
+      "shares": 675,
+      "last_close": 109.53,
+      "rupees_at_last_close": 73932.75
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "book": "top 3 equal weight, set once a month",
+  "first_fill": "2018-05-15",
+  "last": "2026-10-15",
+  "universe": [
+    "ABBOTINDIA",
+    "AJANTPHARM",
+    "ALKEM",
+    "AUROPHARMA",
+    "BIOCON",
+    "COHANCE",
+    "GLAND",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "IPCALAB",
+    "LAURUSLABS",
+    "LUPIN",
+    "MANKIND",
+    "NATCOPHARM",
+    "NEULANDLAB",
+    "PPLPHARMA",
+    "SYNGENE",
+    "WOCKPHARMA"
+  ],
+  "hold_names_on_first_fill": [
+    "ABBOTINDIA",
+    "AJANTPHARM",
+    "ALKEM",
+    "AUROPHARMA",
+    "BIOCON",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "IPCALAB",
+    "LAURUSLABS",
+    "LUPIN",
+    "NATCOPHARM",
+    "NEULANDLAB",
+    "SYNGENE",
+    "WOCKPHARMA"
+  ],
+  "dropped": [
+    "ANTHEM 2025-07-21 2026-10-15",
+    "ONESOURCE 2025-01-24 2026-10-15",
+    "SAILIFE 2024-12-18 2026-10-15"
+  ],
+  "lim_equal_weight": {
+    "total_return": 3.8301625093142952,
+    "annualized": 0.20944649392170378,
+    "sharpe": 1.003019660950776,
+    "sortino": 1.3887558509686186,
+    "max_drawdown": -0.3543239576108326,
+    "sessions": 2087,
+    "end_equity": 4830162.509314295,
+    "costs": 18853.510685704518,
+    "tax": 444406.90768164466,
+    "net_profit": 3385755.60163265
+  },
+  "buy_hold": {
+    "total_return": 5.113748551844044,
+    "annualized": 0.244356043598154,
+    "sharpe": 1.1871575228411342,
+    "sortino": 1.7003969082791721,
+    "max_drawdown": -0.31022950785965564,
+    "sessions": 2087,
+    "end_equity": 6113748.551844045,
+    "costs": 7759.9981559566995,
+    "tax": 649461.3425682258,
+    "net_profit": 4464287.209275818
+  },
+  "before_2024": {
+    "total_return": 1.5454873894492343,
+    "annualized": 0.18400392362086082,
+    "sharpe": 0.8726583257335871,
+    "sortino": 1.206486796635861,
+    "max_drawdown": -0.3543239576108326,
+    "sessions": 1394,
+    "end_equity": 2545487.389449234
+  },
+  "from_2024_annualized_before_tax": 0.26229333266002985,
+  "equity_at_2024_boundary": 2545487.389449234,
+  "assumptions": {
+    "no_refit": "Same 90-session ranker, top 3, monthly equal weight. No network. Constants were not changed after this print.",
+    "window": "Bars from 2018. The first trade waits until 90 sessions exist. 2024-2026 was already scored, so this full path is not a new hidden test.",
+    "tax": "FY 2026-27 rates applied to the whole path, including years when the statutory rates were different.",
+    "costs": "The single Zerodha schedule from india-market-learnings.md, including years before that schedule."
+  }
+}
