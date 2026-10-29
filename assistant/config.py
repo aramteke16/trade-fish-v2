@@ -24,11 +24,11 @@ STATEMENT = Path(
 )
 
 # india-market-learnings.md: a decision may use prices only through the close.
-# The order is the next cash open. NSE cash closes 15:30 IST and opens 9:15 IST.
-# Run at 16:00 IST on Friday so that close exists, then the sheet is for the next open.
-DECISION_WEEKDAY = 4  # Monday is 0. Friday is the last session of the week.
-DECISION_HOUR = 16
-DECISION_MINUTE = 0
+# NSE cash opens 09:15 IST. The message goes out then, so it is not missed
+# over the weekend. Monday is 0.
+DECISION_WEEKDAY = 0
+DECISION_HOUR = 9
+DECISION_MINUTE = 15
 
 # Weekly buy budget. The settings page stores the live number in the database.
 WEEKLY_CASH = 5_000

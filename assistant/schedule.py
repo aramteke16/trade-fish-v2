@@ -2,11 +2,9 @@
 
 No broker. This process sends the top 3. Lots stay as they are.
 
-The India rules file says a decision at a close may see prices only up to that
-close, and the fill is the next open. So the job wakes on Friday at 16:00 IST,
-after the 15:30 cash close. Prices come from the Upstox token. The sheet is
-for the next cash open, 09:15 IST. It does not pick a mid-week time such as
-Wednesday 10:00.
+The India rules file says a decision may see prices only through the last
+close. The job sends the buy message on Monday at 09:15 IST, when the cash
+market opens. Prices come from the Upstox token.
 """
 
 import time
@@ -32,7 +30,7 @@ def _clock() -> tuple:
 
 
 def next_run(now: Optional[datetime] = None) -> datetime:
-    """Next configured slot. Defaults to Friday 16:00 IST. A passed slot is next week."""
+    """Next configured slot. Defaults to Monday 09:15 IST. A passed slot is next week."""
     now = now or datetime.now(IST)
     weekday, hour, minute = _clock()
     days = (weekday - now.weekday()) % 7

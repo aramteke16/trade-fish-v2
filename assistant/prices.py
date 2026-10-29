@@ -5,7 +5,8 @@ The access token is read from .env by the engine. This file never prints it.
 
 import csv
 import time
-from datetime import date
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from assistant.clock import today
 from assistant.config import BARS_PATH, INDEX_BARS, PHARMA_BARS
@@ -28,12 +29,21 @@ def _last_dates(path) -> dict[str, str]:
     return last
 
 
+def _last_complete_day() -> date:
+    """Last day whose cash close can exist. Before 15:30 IST, today is still open."""
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
+    day = today()
+    if (now.hour, now.minute) < (15, 30):
+        day = day - timedelta(days=1)
+    return day
+
+
 def ensure_prices(symbols: list[str]) -> None:
     """Download any missing days for these symbols. Older rows are left as they are."""
     known = _last_dates(PHARMA_BARS)
     known.update(_last_dates(BARS_PATH))
     index_last = _last_dates(INDEX_BARS).get(engine.INDEX_SYMBOL, "")
-    end = today()
+    end = _last_complete_day()
     end_text = end.isoformat()
     token = None
 

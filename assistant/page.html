@@ -74,7 +74,7 @@
     <div class="head">
       <div>
         <h1>Pharma book</h1>
-        <p class="muted" id="lead">Friday sends the top 3. Run now does the same at this moment. You place the buys.</p>
+        <p class="muted" id="lead">Monday 09:15 IST sends the top 3. Run now does the same at this moment. You place the buys.</p>
       </div>
       <button id="run" type="button">Run now</button>
     </div>
@@ -211,7 +211,7 @@ function paintWeek() {
   host.replaceChildren();
   const card = node("div", null, "card");
   if (!latest) {
-    card.append(node("p", "No recommendation yet. Friday sends the next one."));
+    card.append(node("p", "No recommendation yet. Monday 09:15 IST sends the next one."));
     host.append(card);
     return;
   }

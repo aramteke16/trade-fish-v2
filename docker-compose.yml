@@ -1,5 +1,5 @@
 # One container for a DigitalOcean droplet.
-# The image command starts the page, the Friday 16:00 IST ticker, and /now.
+# The image command starts the page, the Monday 09:15 IST ticker, and /now.
 #
 # The page has no login. Port 8080 is bound to 127.0.0.1 on the droplet.
 # Open it with an SSH tunnel. Do not publish 8080 on the public firewall.

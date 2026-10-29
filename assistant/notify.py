@@ -43,7 +43,7 @@ def send_test() -> None:
 def render_week(decision: dict) -> str:
     """Top 3 buys. Amount is shares. Price range is the last session low to high."""
     lines = [
-        f"Close {decision.get('day')}. Act at the next NSE cash open, 09:15 IST.",
+        f"Close {decision.get('day')}. Buy at the NSE cash open, 09:15 IST.",
         _invest_line(decision),
         "",
         "BUY",
