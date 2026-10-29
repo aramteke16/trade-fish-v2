@@ -1,0 +1,256 @@
+{
+  "book": "top 3, network weights, rotated once a week",
+  "first_fill": "2018-05-15",
+  "last": "2026-10-15",
+  "universe": [
+    "AAREYDRUGS",
+    "AARTIDRUGS",
+    "AARTIPHARM",
+    "ABBOTINDIA",
+    "ACUTAAS",
+    "AHCL",
+    "AJANTPHARM",
+    "AKUMS",
+    "ALBERTDAVD",
+    "ALIVUS",
+    "ALKEM",
+    "ALPA",
+    "AMANTA",
+    "AMBALALSA",
+    "AMRUTANJAN",
+    "ANTHEM",
+    "ANUHPHR",
+    "APLLTD",
+    "ASTRAZEN",
+    "AUROPHARMA",
+    "BAFNAPH",
+    "BAJAJHCARE",
+    "BALAXI",
+    "BALPHARMA",
+    "BETA",
+    "BIOCON",
+    "BIOFILCHEM",
+    "BLISSGVS",
+    "BLUEJET",
+    "BROOKS",
+    "CAPLIPOINT",
+    "COHANCE",
+    "CONCORDBIO",
+    "CORONA",
+    "DCAL",
+    "EMCURE",
+    "ERIS",
+    "FDC",
+    "FERMENTA",
+    "GLAND",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "GUFICBIO",
+    "GUJTHEM",
+    "HALEOSLABS",
+    "HESTERBIO",
+    "HIKAL",
+    "INDOCO",
+    "INDSWFTLAB",
+    "INNOVACAP",
+    "IOLCP",
+    "IPCALAB",
+    "JAGSNPHARM",
+    "JSLL",
+    "JUBLPHARMA",
+    "KILITCH",
+    "KOPRAN",
+    "KPL",
+    "KREBSBIO",
+    "LAURUSLABS",
+    "LINCOLN",
+    "LUPIN",
+    "LYKALABS",
+    "MANGALAM",
+    "MANKIND",
+    "MARKSANS",
+    "MEDICAMEQ",
+    "MEDICO",
+    "MOREPENLAB",
+    "NATCAPSUQ",
+    "NATCOPHARM",
+    "NECLIFE",
+    "NEULANDLAB",
+    "NGLFINE",
+    "NOVARTIND",
+    "ONESOURCE",
+    "ORCHPHARMA",
+    "ORTINGLOBE",
+    "PANACEABIO",
+    "PAR",
+    "PFIZER",
+    "PGHL",
+    "PPLPHARMA",
+    "RPGLIFE",
+    "RUBICON",
+    "SAILIFE",
+    "SAIPARENT",
+    "SAKAR",
+    "SANOFI",
+    "SANOFICONR",
+    "SENORES",
+    "SHILPAMED",
+    "SHUKRAPHAR",
+    "SIGACHI",
+    "SMSPHARMA",
+    "SOLARA",
+    "SPARC",
+    "STAR",
+    "SUDEEPPHRM",
+    "SUPRIYA",
+    "SUVEN",
+    "SYMBIOTEC",
+    "SYNCOMF",
+    "SYNGENE",
+    "THEMISMED",
+    "UNICHEMLAB",
+    "VAISHALI",
+    "VALIANTLAB",
+    "VENUSREM",
+    "VINEETLAB",
+    "VIVIMEDLAB",
+    "VIYASH",
+    "WANBURY",
+    "WINDLAS",
+    "WOCKPHARMA",
+    "ZIMLAB",
+    "ZOTA"
+  ],
+  "dropped": [],
+  "weekly_nn": {
+    "total_return": 5.200351340857443,
+    "annualized": 0.24647127543353808,
+    "sharpe": 0.7520972256431759,
+    "sortino": 1.0329854276021624,
+    "max_drawdown": -0.49279061308726535,
+    "sessions": 2087,
+    "end_equity": 6200351.340857443,
+    "costs": 59038.88914255529,
+    "tax": 706127.103659678,
+    "net_profit": 4494224.237197765
+  },
+  "yearly": {
+    "years": 8.281746031746032,
+    "yearly_return_before_tax": 0.24647127543353808,
+    "yearly_return_after_tax": 0.2284057316099941,
+    "total_profit_after_tax": 4494224.237197765,
+    "average_profit_per_year": 542666.2710943157
+  },
+  "buy_hold_yearly": {
+    "years": 8.281746031746032,
+    "yearly_return_before_tax": 0.19896537535939296,
+    "yearly_return_after_tax": 0.18418684833374277,
+    "total_profit_after_tax": 3055531.0160061074,
+    "average_profit_per_year": 368947.6837726589
+  },
+  "years_before_tax": [
+    {
+      "year": 2018,
+      "through": "2018-12-31",
+      "return_before_tax": 0.01601849945718148
+    },
+    {
+      "year": 2019,
+      "through": "2019-12-31",
+      "return_before_tax": -0.053451419969000824
+    },
+    {
+      "year": 2020,
+      "through": "2020-12-31",
+      "return_before_tax": 1.9337702121698772
+    },
+    {
+      "year": 2021,
+      "through": "2021-12-31",
+      "return_before_tax": 0.7696679599978338
+    },
+    {
+      "year": 2022,
+      "through": "2022-12-30",
+      "return_before_tax": -0.3350043272016474
+    },
+    {
+      "year": 2023,
+      "through": "2023-12-29",
+      "return_before_tax": 0.3896164746507551
+    },
+    {
+      "year": 2024,
+      "through": "2024-12-31",
+      "return_before_tax": 0.2831285912817636
+    },
+    {
+      "year": 2025,
+      "through": "2025-12-31",
+      "return_before_tax": -0.18336281475501304
+    },
+    {
+      "year": 2026,
+      "through": "2026-10-15",
+      "return_before_tax": 0.2824510146297512
+    }
+  ],
+  "hold_years_before_tax": [
+    {
+      "year": 2018,
+      "through": "2018-12-31",
+      "return_before_tax": -0.14322870390497533
+    },
+    {
+      "year": 2019,
+      "through": "2019-12-31",
+      "return_before_tax": -0.004345850540244278
+    },
+    {
+      "year": 2020,
+      "through": "2020-12-31",
+      "return_before_tax": 1.0487300936972774
+    },
+    {
+      "year": 2021,
+      "through": "2021-12-31",
+      "return_before_tax": 0.21470740806113753
+    },
+    {
+      "year": 2022,
+      "through": "2022-12-30",
+      "return_before_tax": -0.13581534542716922
+    },
+    {
+      "year": 2023,
+      "through": "2023-12-29",
+      "return_before_tax": 0.4324397558963895
+    },
+    {
+      "year": 2024,
+      "through": "2024-12-31",
+      "return_before_tax": 0.4037677811529745
+    },
+    {
+      "year": 2025,
+      "through": "2025-12-31",
+      "return_before_tax": -0.06385536712424877
+    },
+    {
+      "year": 2026,
+      "through": "2026-10-15",
+      "return_before_tax": 0.30138443536903203
+    }
+  ],
+  "before_2024_yearly_before_tax": 0.3184030672442144,
+  "from_2024_yearly_before_tax": 0.11344593545190129,
+  "equity_at_2024_boundary": 4613985.019665207,
+  "assumptions": {
+    "train": "Network trained only on sessions before 2024-01-01. Same seed, reward constants, 90-session ranker, and top 3. Not refit after this print.",
+    "universe": "Every current NSE pharma listing outside the Nifty 100, including names smaller than the smallcap index and trade-for-trade names. A name enters the ranker in the week it is one year old. Hospitals, diagnostics, devices, and Advanced Enzyme are out. Sun, Divi's, Torrent, Zydus, Cipla, and Dr Reddy's stay out. The book still holds three. Delisted names are absent.",
+    "in_sample": "2018-2023 on this path is the training period. It is not a test. 2024-2026 was already used in earlier pharma runs.",
+    "rotation": "Names and weights are set at the close before the first session of each week, filled at that open, and held until the next week.",
+    "tax": "FY 2026-27 rates applied to the whole path. The yearly after-tax return is the compound rate on end value minus that tax."
+  }
+}

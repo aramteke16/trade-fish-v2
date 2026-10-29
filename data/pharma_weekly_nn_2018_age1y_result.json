@@ -1,0 +1,160 @@
+{
+  "book": "top 3, network weights, rotated once a week",
+  "first_fill": "2018-05-15",
+  "last": "2026-10-15",
+  "universe": [
+    "ABBOTINDIA",
+    "AJANTPHARM",
+    "ALKEM",
+    "ANTHEM",
+    "AUROPHARMA",
+    "BIOCON",
+    "COHANCE",
+    "GLAND",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "IPCALAB",
+    "LAURUSLABS",
+    "LUPIN",
+    "MANKIND",
+    "NATCOPHARM",
+    "NEULANDLAB",
+    "ONESOURCE",
+    "PPLPHARMA",
+    "SAILIFE",
+    "SYNGENE",
+    "WOCKPHARMA"
+  ],
+  "dropped": [],
+  "weekly_nn": {
+    "total_return": 2.9273479693804747,
+    "annualized": 0.17960337348358713,
+    "sharpe": 0.7555251153578075,
+    "sortino": 1.1309330599543537,
+    "max_drawdown": -0.6718718781262145,
+    "sessions": 2087,
+    "end_equity": 3927347.9693804746,
+    "costs": 247993.74061952843,
+    "tax": 658499.9725415288,
+    "net_profit": 2268847.996838946
+  },
+  "yearly": {
+    "years": 8.281746031746032,
+    "yearly_return_before_tax": 0.17960337348358713,
+    "yearly_return_after_tax": 0.15375041216891305,
+    "total_profit_after_tax": 2268847.996838946,
+    "average_profit_per_year": 273957.6881664659
+  },
+  "buy_hold_yearly": {
+    "years": 8.281746031746032,
+    "yearly_return_before_tax": 0.244356043598154,
+    "yearly_return_after_tax": 0.22759558267013547,
+    "total_profit_after_tax": 4464287.209275818,
+    "average_profit_per_year": 539051.4502815076
+  },
+  "years_before_tax": [
+    {
+      "year": 2018,
+      "through": "2018-12-31",
+      "return_before_tax": -0.09194165692359035
+    },
+    {
+      "year": 2019,
+      "through": "2019-12-31",
+      "return_before_tax": -0.23932310589905414
+    },
+    {
+      "year": 2020,
+      "through": "2020-12-31",
+      "return_before_tax": 2.255138181061429
+    },
+    {
+      "year": 2021,
+      "through": "2021-12-31",
+      "return_before_tax": -0.002937737473218016
+    },
+    {
+      "year": 2022,
+      "through": "2022-12-30",
+      "return_before_tax": -0.4159907611886512
+    },
+    {
+      "year": 2023,
+      "through": "2023-12-29",
+      "return_before_tax": 0.7821089620963086
+    },
+    {
+      "year": 2024,
+      "through": "2024-12-31",
+      "return_before_tax": 0.385441427187764
+    },
+    {
+      "year": 2025,
+      "through": "2025-12-31",
+      "return_before_tax": -0.030361634396358528
+    },
+    {
+      "year": 2026,
+      "through": "2026-10-15",
+      "return_before_tax": 0.2529731483870712
+    }
+  ],
+  "hold_years_before_tax": [
+    {
+      "year": 2018,
+      "through": "2018-12-31",
+      "return_before_tax": 0.007565462741957241
+    },
+    {
+      "year": 2019,
+      "through": "2019-12-31",
+      "return_before_tax": -0.014361448992724846
+    },
+    {
+      "year": 2020,
+      "through": "2020-12-31",
+      "return_before_tax": 0.8734011682474998
+    },
+    {
+      "year": 2021,
+      "through": "2021-12-31",
+      "return_before_tax": 0.1077462574575947
+    },
+    {
+      "year": 2022,
+      "through": "2022-12-30",
+      "return_before_tax": -0.16876013169803084
+    },
+    {
+      "year": 2023,
+      "through": "2023-12-29",
+      "return_before_tax": 0.5397937083316238
+    },
+    {
+      "year": 2024,
+      "through": "2024-12-31",
+      "return_before_tax": 0.6596303912201307
+    },
+    {
+      "year": 2025,
+      "through": "2025-12-31",
+      "return_before_tax": 0.08342102615031899
+    },
+    {
+      "year": 2026,
+      "through": "2026-10-15",
+      "return_before_tax": 0.28898539456015215
+    }
+  ],
+  "before_2024_yearly_before_tax": 0.16551485916406183,
+  "from_2024_yearly_before_tax": 0.2084609663078203,
+  "equity_at_2024_boundary": 2333241.31324033,
+  "assumptions": {
+    "train": "Network trained only on sessions before 2024-01-01. Same seed, reward constants, 90-session ranker, and top 3. Not refit after this print.",
+    "universe": "Every drug maker in the Nifty MidSmall Healthcare list is eligible in the week its history reaches one year. Names whose file starts on 2018-01-01 were already listed. The book still holds three.",
+    "in_sample": "2018-2023 on this path is the training period. It is not a test. 2024-2026 was already used in earlier pharma runs.",
+    "rotation": "Names and weights are set at the close before the first session of each week, filled at that open, and held until the next week.",
+    "tax": "FY 2026-27 rates applied to the whole path. The yearly after-tax return is the compound rate on end value minus that tax."
+  }
+}

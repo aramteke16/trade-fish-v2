@@ -1,0 +1,160 @@
+{
+  "book": "top 3, network weights, rotated once a week",
+  "first_fill": "2018-05-15",
+  "last": "2026-10-15",
+  "universe": [
+    "ABBOTINDIA",
+    "AJANTPHARM",
+    "ALKEM",
+    "AUROPHARMA",
+    "BIOCON",
+    "COHANCE",
+    "GLAND",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "IPCALAB",
+    "LAURUSLABS",
+    "LUPIN",
+    "MANKIND",
+    "NATCOPHARM",
+    "NEULANDLAB",
+    "PPLPHARMA",
+    "SYNGENE",
+    "WOCKPHARMA"
+  ],
+  "dropped": [
+    "ANTHEM 2025-07-21 2026-10-15",
+    "ONESOURCE 2025-01-24 2026-10-15",
+    "SAILIFE 2024-12-18 2026-10-15"
+  ],
+  "weekly_nn": {
+    "total_return": 4.115115216571382,
+    "annualized": 0.21784637806775242,
+    "sharpe": 0.8773707991031914,
+    "sortino": 1.3302428953070706,
+    "max_drawdown": -0.46988344364383006,
+    "sessions": 2087,
+    "end_equity": 5115115.216571381,
+    "costs": 273975.2334286183,
+    "tax": 906803.4496626187,
+    "net_profit": 3208311.7669087625
+  },
+  "yearly": {
+    "years": 8.281746031746032,
+    "yearly_return_before_tax": 0.21784637806775242,
+    "yearly_return_after_tax": 0.18948634199201253,
+    "total_profit_after_tax": 3208311.766908763,
+    "average_profit_per_year": 387395.5751130849
+  },
+  "buy_hold_yearly": {
+    "years": 8.281746031746032,
+    "yearly_return_before_tax": 0.244356043598154,
+    "yearly_return_after_tax": 0.22759558267013547,
+    "total_profit_after_tax": 4464287.209275818,
+    "average_profit_per_year": 539051.4502815076
+  },
+  "years_before_tax": [
+    {
+      "year": 2018,
+      "through": "2018-12-31",
+      "return_before_tax": -0.0752723353885919
+    },
+    {
+      "year": 2019,
+      "through": "2019-12-31",
+      "return_before_tax": -0.22455617491397362
+    },
+    {
+      "year": 2020,
+      "through": "2020-12-31",
+      "return_before_tax": 1.6453724525414812
+    },
+    {
+      "year": 2021,
+      "through": "2021-12-31",
+      "return_before_tax": -0.018045473099400078
+    },
+    {
+      "year": 2022,
+      "through": "2022-12-30",
+      "return_before_tax": -0.10243556478580373
+    },
+    {
+      "year": 2023,
+      "through": "2023-12-29",
+      "return_before_tax": 0.884204576841636
+    },
+    {
+      "year": 2024,
+      "through": "2024-12-31",
+      "return_before_tax": 0.5414108146379892
+    },
+    {
+      "year": 2025,
+      "through": "2025-12-31",
+      "return_before_tax": 0.06970664706285667
+    },
+    {
+      "year": 2026,
+      "through": "2026-10-15",
+      "return_before_tax": -0.015226760834291642
+    }
+  ],
+  "hold_years_before_tax": [
+    {
+      "year": 2018,
+      "through": "2018-12-31",
+      "return_before_tax": 0.007565462741957241
+    },
+    {
+      "year": 2019,
+      "through": "2019-12-31",
+      "return_before_tax": -0.014361448992724846
+    },
+    {
+      "year": 2020,
+      "through": "2020-12-31",
+      "return_before_tax": 0.8734011682474998
+    },
+    {
+      "year": 2021,
+      "through": "2021-12-31",
+      "return_before_tax": 0.1077462574575947
+    },
+    {
+      "year": 2022,
+      "through": "2022-12-30",
+      "return_before_tax": -0.16876013169803084
+    },
+    {
+      "year": 2023,
+      "through": "2023-12-29",
+      "return_before_tax": 0.5397937083316238
+    },
+    {
+      "year": 2024,
+      "through": "2024-12-31",
+      "return_before_tax": 0.6596303912201307
+    },
+    {
+      "year": 2025,
+      "through": "2025-12-31",
+      "return_before_tax": 0.08342102615031899
+    },
+    {
+      "year": 2026,
+      "through": "2026-10-15",
+      "return_before_tax": 0.28898539456015215
+    }
+  ],
+  "before_2024_yearly_before_tax": 0.23051406132344643,
+  "from_2024_yearly_before_tax": 0.19275840413099354,
+  "equity_at_2024_boundary": 3150185.194549769,
+  "assumptions": {
+    "train": "Network trained only on sessions before 2024-01-01. Same seed, reward constants, 90-session ranker, and top 3. Not refit after this print.",
+    "in_sample": "2018-2023 on this path is the training period. It is not a test. 2024-2026 was already used in earlier pharma runs.",
+    "rotation": "Names and weights are set at the close before the first session of each week, filled at that open, and held until the next week.",
+    "tax": "FY 2026-27 rates applied to the whole path. The yearly after-tax return is the compound rate on end value minus that tax."
+  }
+}

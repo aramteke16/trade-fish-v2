@@ -1,0 +1,85 @@
+{
+  "universe": [
+    "APARINDS",
+    "BHEL",
+    "CESC",
+    "FINCABLES",
+    "GVT&D",
+    "INOXWIND",
+    "JPPOWER",
+    "JSWENERGY",
+    "KEC",
+    "KEI",
+    "KPIL",
+    "NAVA",
+    "NHPC",
+    "NLCINDIA",
+    "RPOWER",
+    "SCHNEIDER",
+    "SJVN",
+    "SUZLON",
+    "TARIL",
+    "TDPOWERSYS",
+    "THERMAX",
+    "TORNTPOWER",
+    "TRITURBINE"
+  ],
+  "dropped": [
+    "NTPCGREEN 2024-11-27 2026-10-16",
+    "ACMESOLAR 2024-11-13 2026-10-16",
+    "CLEANMAX 2026-03-02 2026-10-16",
+    "VEDPOWER 2026-06-15 2026-10-16",
+    "PREMIERENE 2024-09-03 2026-10-16",
+    "WAAREEENER 2024-10-28 2026-10-16",
+    "EMMVEE 2025-11-18 2026-10-16"
+  ],
+  "lim_equal_weight": {
+    "total_return": 0.7017423708761701,
+    "annualized": 0.21294303344750154,
+    "sharpe": 0.802998171595343,
+    "sortino": 1.1674723183690003,
+    "max_drawdown": -0.31813950700620763,
+    "sessions": 694,
+    "end_equity": 1701742.37087617,
+    "costs": 28666.159123829904,
+    "tax": 115964.92544000002,
+    "net_profit": 585777.44543617
+  },
+  "buy_hold": {
+    "total_return": 0.8841525785033344,
+    "annualized": 0.2586299267975971,
+    "sharpe": 1.009976585637086,
+    "sortino": 1.3097578284504017,
+    "max_drawdown": -0.3195547309156116,
+    "sessions": 694,
+    "end_equity": 1884152.5785033344,
+    "costs": 3503.9914966658193,
+    "tax": 99145.3541,
+    "net_profit": 785007.2244033344
+  },
+  "ppo": {
+    "total_return": 0.9931683518673275,
+    "annualized": 0.28460063407481306,
+    "sharpe": 0.9319319542225947,
+    "sortino": 1.4861470653277546,
+    "max_drawdown": -0.3463641383638736,
+    "sessions": 694,
+    "end_equity": 1993168.3518673275,
+    "costs": 112254.98813267169,
+    "tax": 270011.7849000008,
+    "net_profit": 723156.5669673267
+  },
+  "assumptions": {
+    "reward_constants_not_in_paper": {
+      "c_pos": 0.05,
+      "c_neg": 0.05,
+      "c_step": 0.01,
+      "d_min": 2,
+      "horiz_cap": 0.05,
+      "end_bonus": 0.1
+    },
+    "fills": "decision at close, fill next open, sold at last test close",
+    "costs": "Zerodha delivery, brokerage 0, DP 13.5 plus GST once per symbol per sell day",
+    "tax": "STCG 20% if held one year or less, LTCG 12.5% above 1.25 lakh per FY, 4% cess, subtracted from reported profit only"
+  }
+}

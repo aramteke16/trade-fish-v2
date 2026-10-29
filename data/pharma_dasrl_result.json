@@ -1,0 +1,77 @@
+{
+  "universe": [
+    "ABBOTINDIA",
+    "AJANTPHARM",
+    "ALKEM",
+    "AUROPHARMA",
+    "BIOCON",
+    "COHANCE",
+    "GLAND",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "IPCALAB",
+    "LAURUSLABS",
+    "LUPIN",
+    "MANKIND",
+    "NATCOPHARM",
+    "NEULANDLAB",
+    "PPLPHARMA",
+    "SYNGENE",
+    "WOCKPHARMA"
+  ],
+  "dropped": [
+    "ANTHEM 2025-07-21 2026-10-15",
+    "ONESOURCE 2025-01-24 2026-10-15",
+    "SAILIFE 2024-12-18 2026-10-15"
+  ],
+  "lim_equal_weight": {
+    "total_return": 1.5712759029396333,
+    "annualized": 0.409759320175193,
+    "sharpe": 1.5489310926320308,
+    "sortino": 2.329547612521272,
+    "max_drawdown": -0.21603067288725986,
+    "sessions": 693,
+    "end_equity": 2571275.9029396335,
+    "costs": 27932.287060366598,
+    "tax": 272775.89638,
+    "net_profit": 1298500.0065596334
+  },
+  "buy_hold": {
+    "total_return": 0.8285800074108334,
+    "annualized": 0.2454152229149833,
+    "sharpe": 1.2378287673035078,
+    "sortino": 1.7441256632368594,
+    "max_drawdown": -0.1911013353104417,
+    "sessions": 693,
+    "end_equity": 1828580.0074108334,
+    "costs": 3349.28258916694,
+    "tax": 91900.80769999999,
+    "net_profit": 736679.1997108334
+  },
+  "ppo": {
+    "total_return": 1.8455867904871859,
+    "annualized": 0.46269371388890446,
+    "sharpe": 1.4220576301132826,
+    "sortino": 2.303866166061753,
+    "max_drawdown": -0.29835326703968523,
+    "sessions": 693,
+    "end_equity": 2845586.790487186,
+    "costs": 175378.79951281362,
+    "tax": 410304.43766000035,
+    "net_profit": 1435282.3528271858
+  },
+  "assumptions": {
+    "reward_constants_not_in_paper": {
+      "c_pos": 0.05,
+      "c_neg": 0.05,
+      "c_step": 0.01,
+      "d_min": 2,
+      "horiz_cap": 0.05,
+      "end_bonus": 0.1
+    },
+    "fills": "decision at close, fill next open, sold at last test close",
+    "costs": "Zerodha delivery, brokerage 0, DP 13.5 plus GST once per symbol per sell day",
+    "tax": "STCG 20% if held one year or less, LTCG 12.5% above 1.25 lakh per FY, 4% cess, subtracted from reported profit only"
+  }
+}

@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pharma book</title>
+<style>
+  :root {
+    --paper: #f3efe6;
+    --card: #fffdf8;
+    --ink: #1a1814;
+    --muted: #5e584e;
+    --line: #d8d0c3;
+    --top: #1f4d38;
+    --sell: #8d3b2a;
+    --bad: #f4e4dc;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.45 ui-sans-serif, system-ui, sans-serif;
+  }
+  .shell { width: min(1120px, calc(100% - 28px)); margin: 0 auto; }
+  header.top {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--card); border-bottom: 1px solid var(--line); padding: 14px 0 12px;
+  }
+  .head { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  h1 { margin: 0; font-size: 18px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .clocks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .clock { background: var(--paper); border-radius: 6px; padding: 8px 10px; min-width: 0; }
+  .clock span { display: block; color: var(--muted); font-size: 12px; }
+  .clock strong { font-size: 14px; font-weight: 650; }
+  button, select, input { font: inherit; color: inherit; }
+  button {
+    background: var(--ink); color: var(--card); border: 0; border-radius: 6px;
+    padding: 8px 12px; cursor: pointer;
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  button:disabled { opacity: 0.5; cursor: default; }
+  nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0; }
+  nav button { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  nav button.on { background: var(--ink); color: var(--card); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 14px; margin: 0 0 12px; }
+  .banner { padding: 10px 12px; border-radius: 6px; margin-bottom: 12px; }
+  .banner.bad { background: var(--bad); }
+  .banner.ok { background: #e5efe8; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 13px; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .stock { display: flex; flex-direction: column; }
+  .stock .code { font-weight: 650; }
+  .stock .co { color: var(--muted); font-size: 12px; }
+  .scroll { overflow-x: auto; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: end; }
+  label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  input, select { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; }
+  .line { border-top: 1px solid var(--line); padding-top: 10px; margin-top: 10px; }
+  .sell { color: var(--sell); }
+  .buy { color: var(--top); }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  @media (max-width: 800px) {
+    .clocks { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="head">
+      <div>
+        <h1>Pharma book</h1>
+        <p class="muted" id="lead">Monday 09:15 IST sends the top 3. Run now does the same at this moment. You place the buys.</p>
+      </div>
+      <button id="run" type="button">Run now</button>
+    </div>
+    <div class="clocks">
+      <div class="clock"><span>Next message</span><strong id="next">—</strong></div>
+      <div class="clock"><span>This week's buy</span><strong id="sheet">—</strong></div>
+      <div class="clock"><span>Weekly budget</span><strong id="cash">—</strong></div>
+      <div class="clock"><span>Holdings</span><strong id="parked">—</strong></div>
+    </div>
+  </header>
+  <div id="banner" class="banner" hidden></div>
+  <nav>
+    <button type="button" class="on" data-tab="week">This week</button>
+    <button type="button" data-tab="book">Portfolio</button>
+    <button type="button" data-tab="scores">Scores</button>
+    <button type="button" data-tab="fills">Fills</button>
+    <button type="button" data-tab="config">Config</button>
+  </nav>
+  <section id="week"></section>
+  <section id="book" hidden></section>
+  <section id="scores" hidden></section>
+  <section id="fills" hidden></section>
+  <section id="config" hidden>
+    <form id="settings" class="card">
+      <div class="row">
+        <label>Weekday
+          <select name="decision_weekday">
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
+          </select>
+        </label>
+        <label>Hour<input name="decision_hour" inputmode="numeric"></label>
+        <label>Minute<input name="decision_minute" inputmode="numeric"></label>
+        <label>Weekly budget<input name="weekly_cash" inputmode="numeric"></label>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <label>Upstox token<input name="token" type="password" autocomplete="off" placeholder="blank keeps the current token"></label>
+        <label>Telegram bot token<input name="telegram_token" type="password" autocomplete="off" placeholder="blank keeps the current token"></label>
+        <label>Telegram chat id<input name="telegram_chat_id" autocomplete="off"></label>
+        <label>Notify<input name="notify_on" type="checkbox"></label>
+      </div>
+      <p class="muted" id="hints"></p>
+      <div class="row">
+        <button type="submit">Save</button>
+        <button type="button" class="ghost" id="test-note">Send test</button>
+      </div>
+      <p class="muted" id="save-note"></p>
+    </form>
+  </section>
+</div>
+<script>
+let snapshot = null;
+let weekMark = "";
+let bookMark = "";
+
+function node(tag, text, cls) {
+  const el = document.createElement(tag);
+  if (cls) el.className = cls;
+  if (text != null) el.textContent = text;
+  return el;
+}
+function rupees(value, digits) {
+  if (value == null || value === "") return "—";
+  return "₹" + Number(value).toLocaleString("en-IN", {
+    minimumFractionDigits: digits || 0,
+    maximumFractionDigits: digits || 0,
+  });
+}
+function companyName(symbol, fallback) {
+  const table = (snapshot && snapshot.names) || {};
+  const named = symbol && table[symbol] ? table[symbol] : "";
+  if (named) return named;
+  if (fallback && String(fallback).toUpperCase() !== String(symbol || "").toUpperCase()) return String(fallback);
+  return "";
+}
+function stockNode(symbol, fallback) {
+  const wrap = node("span", null, "stock");
+  const company = companyName(symbol, fallback);
+  wrap.append(node("span", company || symbol || fallback || "—", "code"));
+  if (symbol) wrap.append(node("span", symbol, "co"));
+  return wrap;
+}
+function rangeText(item) {
+  if (item.low == null || item.high == null) {
+    const close = item.price != null ? item.price : item.close;
+    return close == null ? "unavailable" : "unavailable (close " + rupees(close, 2) + ")";
+  }
+  return rupees(item.low, 2) + " – " + rupees(item.high, 2);
+}
+function showBanner(text, bad) {
+  const banner = document.getElementById("banner");
+  banner.hidden = !text;
+  banner.className = "banner " + (bad ? "bad" : "ok");
+  banner.textContent = text || "";
+}
+function paintHeader() {
+  const book = snapshot.portfolio || {};
+  document.getElementById("next").textContent = (snapshot.next_run || "—").replace("T", " ") + " IST";
+  const latest = snapshot.latest;
+  const buys = (latest && latest.buys) || [];
+  document.getElementById("sheet").textContent = buys.length ? buys.map((item) => item.symbol).join(", ") : "None";
+  document.getElementById("cash").textContent = rupees(snapshot.settings.weekly_cash, 0);
+  document.getElementById("parked").textContent = String((book.rows || []).length);
+  const button = document.getElementById("run");
+  button.disabled = !!snapshot.running;
+  button.textContent = snapshot.running ? "Running…" : "Run now";
+  if (snapshot.run_error) showBanner(snapshot.run_error, true);
+  const form = document.getElementById("settings");
+  if (document.activeElement && form.contains(document.activeElement)) return;
+  const settings = snapshot.settings;
+  form.decision_weekday.value = String(settings.decision_weekday);
+  form.decision_hour.value = settings.decision_hour;
+  form.decision_minute.value = settings.decision_minute;
+  form.weekly_cash.value = settings.weekly_cash;
+  form.telegram_chat_id.value = settings.telegram_chat_id || "";
+  form.notify_on.checked = !!settings.notify_on;
+  const bits = [];
+  bits.push(snapshot.token_set ? "Upstox token " + snapshot.token_hint : "No Upstox token");
+  bits.push(snapshot.telegram_set ? "Telegram token " + snapshot.telegram_hint : "No Telegram token");
+  document.getElementById("hints").textContent = bits.join(". ") + ".";
+}
+
+function paintWeek() {
+  const latest = snapshot.latest;
+  const mark = latest ? String(latest.id) + ":" + (latest.recorded_at || "") : "none";
+  const host = document.getElementById("week");
+  if (weekMark === mark && host.childElementCount) return;
+  weekMark = mark;
+  host.replaceChildren();
+  const card = node("div", null, "card");
+  if (!latest) {
+    card.append(node("p", "No recommendation yet. Monday 09:15 IST sends the next one."));
+    host.append(card);
+    return;
+  }
+  const invest = Number(latest.invest_rupees || 0);
+  card.append(node("p", "Close " + latest.day + ". Budget " + rupees(invest, 0) + " this week."));
+  card.append(node("p", "Amount is the share count. Price range is the last Upstox session. You place the buys.", "muted"));
+  card.append(node("h2", "Buy", "buy"));
+  (latest.buys || []).forEach((buy) => card.append(readLine(buy)));
+  if (!(latest.buys || []).length) card.append(node("p", "No share fits this budget.", "muted"));
+  host.append(card);
+}
+
+function paintBook() {
+  const book = snapshot.portfolio || { rows: [] };
+  const mark = JSON.stringify([book.as_of, book.cash, book.sale_proceeds, (book.rows || []).length]);
+  const host = document.getElementById("book");
+  if (bookMark === mark && host.childElementCount) return;
+  bookMark = mark;
+  host.replaceChildren();
+  const add = node("form", null, "card");
+  add.id = "purchase";
+  add.append(node("p", "Manual purchase. A name already in pharma, electricity, or this book gets a lot only."));
+  const fields = node("div", null, "row");
+  fields.append(field("Symbol or company", "query"), field("Amount (shares)", "shares"), field("Rupees", "rupees"), field("Fill date", "fill_date", "date"));
+  add.append(fields);
+  add.append(node("button", "Add purchase"));
+  add.addEventListener("submit", submitPurchase);
+  host.append(add);
+  const card = node("div", null, "card");
+  card.append(node("p", "Cost " + rupees(book.cost, 0) + " · Market " + rupees(book.market, 0) + " · Unrealised " + rupees(book.pnl, 0) + "."));
+  const filters = node("div", null, "filters");
+  const search = document.createElement("input");
+  search.placeholder = "Symbol or name";
+  search.id = "book-search";
+  const list = document.createElement("select");
+  list.id = "book-list";
+  ["all", "pharma", "electricity", "personal", "unscored"].forEach((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    list.append(option);
+  });
+  filters.append(search, list);
+  card.append(filters);
+  const wrap = node("div", null, "scroll");
+  const table = document.createElement("table");
+  table.id = "book-table";
+  wrap.append(table);
+  card.append(wrap);
+  host.append(card);
+  search.addEventListener("input", drawBook);
+  list.addEventListener("change", drawBook);
+  drawBook();
+}
+
+function field(label, name, type) {
+  const wrap = node("label", null);
+  wrap.append(label);
+  const input = document.createElement("input");
+  input.name = name;
+  if (type) input.type = type;
+  wrap.append(input);
+  return wrap;
+}
+
+function drawBook() {
+  const rows = (snapshot.portfolio && snapshot.portfolio.rows) || [];
+  const q = (document.getElementById("book-search").value || "").toUpperCase();
+  const list = document.getElementById("book-list").value;
+  const table = document.getElementById("book-table");
+  table.replaceChildren();
+  const head = document.createElement("tr");
+  ["Stock", "List", "Amount", "Avg", "Cost", "Close", "Range", "Value", "P&L", "Held", "Term", "Up-days", "Life"].forEach((title) => {
+    head.append(node("th", title));
+  });
+  const thead = document.createElement("thead");
+  thead.append(head);
+  table.append(thead);
+  const body = document.createElement("tbody");
+  rows.filter((row) => {
+    if (list !== "all" && row.list !== list) return false;
+    const blob = ((row.symbol || "") + " " + (row.name || "")).toUpperCase();
+    return !q || blob.includes(q);
+  }).forEach((row) => {
+    const tr = document.createElement("tr");
+    const stock = document.createElement("td");
+    stock.append(stockNode(row.symbol, row.name));
+    if (!row.purchased) {
+      const date = document.createElement("input");
+      date.type = "date";
+      const button = node("button", "Set date", "ghost");
+      button.type = "button";
+      button.addEventListener("click", () => saveDate(row.id, date.value));
+      stock.append(date, button);
+    }
+    tr.append(stock);
+    [
+      row.list,
+      String(row.shares),
+      row.avg_price == null ? "—" : rupees(row.avg_price, 2),
+      rupees(row.cost, 0),
+      rupees(row.close, 2),
+      rangeText(row),
+      rupees(row.market, 0),
+      row.pnl == null ? "—" : rupees(row.pnl, 0),
+      row.held_days == null ? "no date" : String(row.held_days),
+      row.term ? row.term + " " + (row.anniversary || "") : "—",
+      row.hold_share == null ? "—" : (row.hold_share * 100).toFixed(1) + "%",
+      row.life_share == null ? "—" : (row.life_share * 100).toFixed(1) + "%",
+    ].forEach((text) => tr.append(node("td", text)));
+    if (row.in_top3) tr.append(node("td", "top 3"));
+    body.append(tr);
+  });
+  table.append(body);
+}
+
+async function submitPurchase(event) {
+  event.preventDefault();
+  const form = event.target;
+  const payload = await postJson("/api/purchase", {
+    query: form.query.value,
+    shares: Number(form.shares.value),
+    rupees: Number(form.rupees.value),
+    fill_date: form.fill_date.value,
+  });
+  if (!payload) return;
+  bookMark = "";
+  snapshot = payload.state;
+  showBanner(payload.notice, false);
+  paint();
+}
+
+async function saveDate(id, purchased) {
+  if (!purchased) {
+    showBanner("Enter the purchase date.", true);
+    return;
+  }
+  const payload = await postJson("/api/lot-date", { id: id, purchased: purchased });
+  if (!payload) return;
+  bookMark = "";
+  snapshot = payload.state;
+  showBanner(payload.notice, false);
+  paint();
+}
+
+function paintScores() {
+  const host = document.getElementById("scores");
+  const rows = (snapshot.scheduled || []).concat(snapshot.manual || []);
+  const mark = rows.map((row) => String(row.id)).join(",");
+  if (host.dataset.mark === mark && host.childElementCount) return;
+  host.dataset.mark = mark;
+  host.replaceChildren();
+  const card = node("div", null, "card");
+  if (!rows.length) {
+    card.append(node("p", "No sheet stored yet."));
+    host.append(card);
+    return;
+  }
+  const pick = document.createElement("select");
+  rows.forEach((row) => {
+    const option = document.createElement("option");
+    option.value = String(row.id);
+    option.textContent = row.day + " " + (row.source || "schedule") + " " + (row.status || "");
+    pick.append(option);
+  });
+  pick.value = String(rows[rows.length - 1].id);
+  card.append(pick);
+  const body = node("div");
+  card.append(body);
+  pick.addEventListener("change", () => drawScore(rows, pick.value, body));
+  host.append(card);
+  drawScore(rows, pick.value, body);
+}
+
+function drawScore(rows, id, body) {
+  const row = rows.find((item) => String(item.id) === String(id));
+  body.replaceChildren();
+  if (!row) return;
+  body.append(node("p", "Budget " + rupees(row.invest_rupees || 0, 0) + " this week."));
+  (row.top || []).forEach((item, index) => {
+    const line = node("p");
+    line.append(node("span", (index + 1) + ". "));
+    line.append(stockNode(item.symbol, item.name));
+    line.append(node("span", "  " + Number(item.score).toFixed(3)));
+    body.append(line);
+  });
+  body.append(node("h2", "Buy", "buy"));
+  (row.buys || []).forEach((item) => body.append(readLine(item)));
+  if (!(row.buys || []).length) body.append(node("p", "No share fits this budget.", "muted"));
+}
+
+function readLine(item) {
+  const line = node("p");
+  line.append(stockNode(item.symbol, item.name));
+  line.append(node("span", "  Amount: " + item.shares + " shares. Price range: " + rangeText(item)));
+  return line;
+}
+
+function paintFills() {
+  const host = document.getElementById("fills");
+  host.replaceChildren();
+  const card = node("div", null, "card");
+  const fills = snapshot.fills || [];
+  if (!fills.length) {
+    card.append(node("p", "No fills on file. Friday does not record an order."));
+    host.append(card);
+    return;
+  }
+  const table = document.createElement("table");
+  const head = document.createElement("tr");
+  ["When", "Side", "Stock", "Suggested", "Amount", "Price", "Rupees", "Note"].forEach((title) => head.append(node("th", title)));
+  const thead = document.createElement("thead");
+  thead.append(head);
+  table.append(thead);
+  const body = document.createElement("tbody");
+  fills.forEach((row) => {
+    const tr = document.createElement("tr");
+    const stock = document.createElement("td");
+    stock.append(stockNode(row.symbol, row.name));
+    tr.append(node("td", (row.fill_date || "") + " " + (row.confirmed_at || "")));
+    tr.append(node("td", row.side));
+    tr.append(stock);
+    tr.append(node("td", row.suggested_shares == null ? "—" : String(row.suggested_shares)));
+    tr.append(node("td", row.filled_shares == null ? "—" : String(row.filled_shares) + " shares"));
+    tr.append(node("td", row.fill_price == null ? "—" : rupees(row.fill_price, 2)));
+    tr.append(node("td", row.fill_rupees == null ? "—" : rupees(row.fill_rupees, 0)));
+    tr.append(node("td", row.note || ""));
+    body.append(tr);
+  });
+  table.append(body);
+  const wrap = node("div", null, "scroll");
+  wrap.append(table);
+  card.append(wrap);
+  host.append(card);
+}
+
+function paint() {
+  paintHeader();
+  paintWeek();
+  paintBook();
+  paintScores();
+  paintFills();
+}
+
+async function postJson(url, body) {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const payload = await response.json();
+    if (!response.ok) {
+      showBanner(payload.error || "Could not save.", true);
+      return null;
+    }
+    return payload;
+  } catch (error) {
+    showBanner("Could not save.", true);
+    return null;
+  }
+}
+
+document.querySelectorAll("nav button").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach((item) => item.classList.remove("on"));
+    button.classList.add("on");
+    ["week", "book", "scores", "fills", "config"].forEach((id) => {
+      document.getElementById(id).hidden = id !== button.dataset.tab;
+    });
+  });
+});
+
+document.getElementById("settings").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const payload = await postJson("/api/settings", {
+    decision_weekday: Number(form.decision_weekday.value),
+    decision_hour: Number(form.decision_hour.value),
+    decision_minute: Number(form.decision_minute.value),
+    weekly_cash: Number(form.weekly_cash.value),
+    token: form.token.value,
+    telegram_token: form.telegram_token.value,
+    telegram_chat_id: form.telegram_chat_id.value,
+    notify_on: form.notify_on.checked,
+  });
+  if (!payload) return;
+  form.token.value = "";
+  form.telegram_token.value = "";
+  snapshot = payload;
+  document.getElementById("save-note").textContent = "Saved.";
+  paint();
+});
+
+document.getElementById("test-note").addEventListener("click", async () => {
+  const payload = await postJson("/api/notify-test", {});
+  if (!payload) return;
+  showBanner(payload.notice, false);
+});
+
+document.getElementById("run").addEventListener("click", async () => {
+  const button = document.getElementById("run");
+  button.disabled = true;
+  button.textContent = "Running…";
+  const payload = await postJson("/api/now", {});
+  if (!payload) {
+    button.disabled = false;
+    button.textContent = "Run now";
+    return;
+  }
+  load();
+});
+
+async function load() {
+  try {
+    const response = await fetch("/api/state");
+    snapshot = await response.json();
+    paint();
+  } catch (error) {
+    showBanner("Page data did not load.", true);
+  }
+}
+load();
+setInterval(load, 15000);
+</script>
+</body>
+</html>

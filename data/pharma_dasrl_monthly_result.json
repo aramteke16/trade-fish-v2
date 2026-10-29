@@ -1,0 +1,79 @@
+{
+  "universe": [
+    "ABBOTINDIA",
+    "AJANTPHARM",
+    "ALKEM",
+    "AUROPHARMA",
+    "BIOCON",
+    "COHANCE",
+    "GLAND",
+    "GLAXO",
+    "GLENMARK",
+    "GRANULES",
+    "IPCALAB",
+    "LAURUSLABS",
+    "LUPIN",
+    "MANKIND",
+    "NATCOPHARM",
+    "NEULANDLAB",
+    "PPLPHARMA",
+    "SYNGENE",
+    "WOCKPHARMA"
+  ],
+  "dropped": [
+    "ANTHEM 2025-07-21 2026-10-15",
+    "ONESOURCE 2025-01-24 2026-10-15",
+    "SAILIFE 2024-12-18 2026-10-15"
+  ],
+  "lim_equal_weight": {
+    "total_return": 1.564510097759419,
+    "annualized": 0.4084092788430982,
+    "sharpe": 1.5647738261330693,
+    "sortino": 2.3247623370883463,
+    "max_drawdown": -0.21329848714738342,
+    "sessions": 693,
+    "end_equity": 2564510.097759419,
+    "costs": 9718.082240580481,
+    "tax": 214468.72636772913,
+    "net_profit": 1350041.3713916899
+  },
+  "buy_hold": {
+    "total_return": 0.828591663407672,
+    "annualized": 0.24541810971067868,
+    "sharpe": 1.2378426113040466,
+    "sortino": 1.74414265388464,
+    "max_drawdown": -0.191101067658067,
+    "sessions": 693,
+    "end_equity": 1828591.663407672,
+    "costs": 3337.6265923281403,
+    "tax": 91829.86827269733,
+    "net_profit": 736761.7951349746
+  },
+  "ppo": {
+    "total_return": 0.589757094273091,
+    "annualized": 0.18361698775953506,
+    "sharpe": 0.6358089394519145,
+    "sortino": 1.0292316755299553,
+    "max_drawdown": -0.5079378454449124,
+    "sessions": 693,
+    "end_equity": 1589757.094273091,
+    "costs": 42240.55572690965,
+    "tax": 190998.02412950524,
+    "net_profit": 398759.0701435858
+  },
+  "assumptions": {
+    "reward_constants_not_in_paper": {
+      "c_pos": 0.05,
+      "c_neg": 0.05,
+      "c_step": 0.01,
+      "d_min": 2,
+      "horiz_cap": 0.05,
+      "end_bonus": 0.1
+    },
+    "fills": "names and weights set at the close before the first session of the month, fill that open, held until the next month, no buy on the last session, sold at last test close",
+    "costs": "Zerodha delivery from india-market-learnings.md: brokerage 0, STT 0.1% both sides, NSE 0.00307%, SEBI and IPFT Rs 10/crore, stamp 0.015% on the buy, GST 18% on exchange+SEBI only, DP Rs 15.34 inclusive once per symbol per sell day",
+    "tax": "FY 2026-27. STCG 20% if held 12 months or less, including the anniversary. LTCG 12.5% above 1.25 lakh per FY after set-off. 4% cess. Deductible costs exclude STT. STCL offsets STCG then LTCG. LTCL offsets LTCG only. Carry forward 8 FYs. Tax is not taken from cash.",
+    "not_applied": "Skip-month and a trend-to-cash filter are later changes in the note, and the note gives no trend rule. The NSE momentum clone was not substituted for this book. No F&O.",
+    "look": "Monthly weights on the mixed mid-and-small pharma book. Same ranker, reward constants, seed, and pre-2024 train cut. Weights are set when the names refresh and then held. Third look at the 2024-2026 window. Earlier pharma files are unchanged."
+  }
+}

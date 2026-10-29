@@ -1,0 +1,664 @@
+{
+  "cash": 0.0,
+  "last_add_month": null,
+  "as_of": "2026-10-17",
+  "lots": [
+    {
+      "symbol": "ABFRL",
+      "isin": "INE647O01011",
+      "name": "ADITYA BIRLA FASHION & RT",
+      "shares": 11,
+      "purchased": null,
+      "avg_price": 81.7,
+      "from_book": false
+    },
+    {
+      "symbol": "ADVIKCA",
+      "isin": "INE178T01024",
+      "name": "ADVIK CAPITAL LTD.",
+      "shares": 500,
+      "purchased": null,
+      "avg_price": 2.29,
+      "from_book": false
+    },
+    {
+      "symbol": "ASHOKLEY",
+      "isin": "INE208A01029",
+      "name": "ASHOK LEYLAND LTD",
+      "shares": 36,
+      "purchased": null,
+      "avg_price": 176.25,
+      "from_book": false
+    },
+    {
+      "symbol": "ATHERENERG",
+      "isin": "INE0LEZ01016",
+      "name": "ATHER ENERGY LIMITED",
+      "shares": 20,
+      "purchased": null,
+      "avg_price": 628.72,
+      "from_book": false
+    },
+    {
+      "symbol": "BANCOINDIA",
+      "isin": "INE213C01025",
+      "name": "BANCO PRODUCTS (I) LTD",
+      "shares": 12,
+      "purchased": null,
+      "avg_price": 457.23,
+      "from_book": false
+    },
+    {
+      "symbol": null,
+      "isin": "INE473E01021",
+      "name": "BASANT AGRO TECH (INDIA) LTD.",
+      "shares": 60,
+      "purchased": null,
+      "avg_price": 18.51,
+      "from_book": false
+    },
+    {
+      "symbol": "GROWW",
+      "isin": "INE0HOQ01053",
+      "name": "BILLIONBRAINS GARAGE VN L",
+      "shares": 14,
+      "purchased": null,
+      "avg_price": 159.39,
+      "from_book": false
+    },
+    {
+      "symbol": "FIRSTCRY",
+      "isin": "INE02RE01045",
+      "name": "BRAINBEES SOLUTIONS LTD",
+      "shares": 4,
+      "purchased": null,
+      "avg_price": 351.31,
+      "from_book": false
+    },
+    {
+      "symbol": "CASTROLIND",
+      "isin": "INE172A01027",
+      "name": "CASTROL INDIA LIMITED",
+      "shares": 2,
+      "purchased": null,
+      "avg_price": 200.65,
+      "from_book": false
+    },
+    {
+      "symbol": "CHAMBLFERT",
+      "isin": "INE085A01013",
+      "name": "CHAMBAL FERTILIZERS LTD",
+      "shares": 5,
+      "purchased": null,
+      "avg_price": 511.88,
+      "from_book": false
+    },
+    {
+      "symbol": "CIPLA",
+      "isin": "INE059A01026",
+      "name": "CIPLA LTD",
+      "shares": 4,
+      "purchased": null,
+      "avg_price": 1456.5,
+      "from_book": false
+    },
+    {
+      "symbol": "DELHIVERY",
+      "isin": "INE148O01028",
+      "name": "DELHIVERY LIMITED",
+      "shares": 27,
+      "purchased": null,
+      "avg_price": 406.33,
+      "from_book": false
+    },
+    {
+      "symbol": "AGARWALEYE",
+      "isin": "INE943P01029",
+      "name": "DR AGARWALS HEALTH CARE L",
+      "shares": 10,
+      "purchased": null,
+      "avg_price": 393.35,
+      "from_book": false
+    },
+    {
+      "symbol": "DRREDDY",
+      "isin": "INE089A01031",
+      "name": "DR. REDDY S LABORATORIES",
+      "shares": 7,
+      "purchased": null,
+      "avg_price": 1181.84,
+      "from_book": false
+    },
+    {
+      "symbol": "EMIL",
+      "isin": "INE02YR01019",
+      "name": "ELECTRONICS MART IND LTD",
+      "shares": 6,
+      "purchased": null,
+      "avg_price": 170.64,
+      "from_book": false
+    },
+    {
+      "symbol": "ERIS",
+      "isin": "INE406M01024",
+      "name": "ERIS LIFESCIENCES LIMITED",
+      "shares": 4,
+      "purchased": null,
+      "avg_price": 1402.85,
+      "from_book": false
+    },
+    {
+      "symbol": "ETERNAL",
+      "isin": "INE758T01015",
+      "name": "ETERNAL LIMITED",
+      "shares": 33,
+      "purchased": null,
+      "avg_price": 250.08,
+      "from_book": false
+    },
+    {
+      "symbol": "GAUDIUMIVF",
+      "isin": "INE0P8B01020",
+      "name": "GAUDIUM IVF N WOMEN H L",
+      "shares": 109,
+      "purchased": null,
+      "avg_price": 79.0,
+      "from_book": false
+    },
+    {
+      "symbol": "HFCL",
+      "isin": "INE548A01028",
+      "name": "HFCL LIMITED",
+      "shares": 17,
+      "purchased": null,
+      "avg_price": 170.99,
+      "from_book": false
+    },
+    {
+      "symbol": "HAL",
+      "isin": "INE066F01020",
+      "name": "HINDUSTAN AERONAUTICS LTD",
+      "shares": 1,
+      "purchased": null,
+      "avg_price": 4150.45,
+      "from_book": false
+    },
+    {
+      "symbol": "IDFCFIRSTB",
+      "isin": "INE092T01019",
+      "name": "IDFC FIRST BANK LIMITED",
+      "shares": 35,
+      "purchased": null,
+      "avg_price": 62.35,
+      "from_book": false
+    },
+    {
+      "symbol": "IRCTC",
+      "isin": "INE335Y01020",
+      "name": "INDIAN RAIL TOUR CORP LTD",
+      "shares": 7,
+      "purchased": null,
+      "avg_price": 671.57,
+      "from_book": false
+    },
+    {
+      "symbol": "IGCL",
+      "isin": "INE05J901018",
+      "name": "INDOGULF CROPSCIENCES LTD",
+      "shares": 80,
+      "purchased": null,
+      "avg_price": 82.05,
+      "from_book": false
+    },
+    {
+      "symbol": "INDUSINDBK",
+      "isin": "INE095A01012",
+      "name": "INDUSIND BANK LIMITED",
+      "shares": 5,
+      "purchased": null,
+      "avg_price": 770.33,
+      "from_book": false
+    },
+    {
+      "symbol": "INFY",
+      "isin": "INE009A01021",
+      "name": "INFOSYS LIMITED",
+      "shares": 6,
+      "purchased": null,
+      "avg_price": 1362.9,
+      "from_book": false
+    },
+    {
+      "symbol": "ESSENTIA",
+      "isin": "INE418N01035",
+      "name": "INTEGRA ESSENTIA LIMITED",
+      "shares": 80,
+      "purchased": null,
+      "avg_price": 3.52,
+      "from_book": false
+    },
+    {
+      "symbol": "ITC",
+      "isin": "INE154A01025",
+      "name": "ITC LTD",
+      "shares": 22,
+      "purchased": null,
+      "avg_price": 369.3,
+      "from_book": false
+    },
+    {
+      "symbol": "JPPOWER",
+      "isin": "INE351F01018",
+      "name": "JAIPRAKASH POWER VEN. LTD",
+      "shares": 112,
+      "purchased": null,
+      "avg_price": 18.19,
+      "from_book": false
+    },
+    {
+      "symbol": "JBMA",
+      "isin": "INE927D01051",
+      "name": "JBM AUTO LIMITED",
+      "shares": 7,
+      "purchased": null,
+      "avg_price": 647.8,
+      "from_book": false
+    },
+    {
+      "symbol": "JYOTHYLAB",
+      "isin": "INE668F01031",
+      "name": "JYOTHY LABS LIMITED",
+      "shares": 8,
+      "purchased": null,
+      "avg_price": 346.44,
+      "from_book": false
+    },
+    {
+      "symbol": "KTKBANK",
+      "isin": "INE614B01018",
+      "name": "KARNATAKA BANK LIMITED",
+      "shares": 18,
+      "purchased": null,
+      "avg_price": 212.18,
+      "from_book": false
+    },
+    {
+      "symbol": "LAURUSLABS",
+      "isin": "INE947Q01028",
+      "name": "LAURUS LABS LIMITED",
+      "shares": 8,
+      "purchased": null,
+      "avg_price": 854.97,
+      "from_book": false
+    },
+    {
+      "symbol": "LGEINDIA",
+      "isin": "INE324D01010",
+      "name": "LG ELECTRONICS INDIA LTD",
+      "shares": 13,
+      "purchased": null,
+      "avg_price": 1140.0,
+      "from_book": false
+    },
+    {
+      "symbol": "LUMINO",
+      "isin": "INE185Q01025",
+      "name": "LUMINO INDUSTRIES LIMITED",
+      "shares": 10,
+      "purchased": null,
+      "avg_price": 100.36,
+      "from_book": false
+    },
+    {
+      "symbol": "MANAPPURAM",
+      "isin": "INE522D01027",
+      "name": "MANAPPURAM FINANCE LTD",
+      "shares": 14,
+      "purchased": null,
+      "avg_price": 216.16,
+      "from_book": false
+    },
+    {
+      "symbol": "MAXHEALTH",
+      "isin": "INE027H01010",
+      "name": "MAX HEALTHCARE INS LTD",
+      "shares": 5,
+      "purchased": null,
+      "avg_price": 1088.04,
+      "from_book": false
+    },
+    {
+      "symbol": null,
+      "isin": "INE101Q07BN2",
+      "name": "MML-10.25%-29-8-30-NCD",
+      "shares": 49,
+      "purchased": null,
+      "avg_price": 1000.0,
+      "from_book": false
+    },
+    {
+      "symbol": null,
+      "isin": "INE987B20018",
+      "name": "NATCO PHARMA LTD",
+      "shares": 2,
+      "purchased": null,
+      "avg_price": 0.0,
+      "from_book": false
+    },
+    {
+      "symbol": "NATCOPHARM",
+      "isin": "INE987B01026",
+      "name": "NATCO PHARMA LTD.",
+      "shares": 26,
+      "purchased": null,
+      "avg_price": 943.04,
+      "from_book": false
+    },
+    {
+      "symbol": "NATIONALUM",
+      "isin": "INE139A01034",
+      "name": "NATIONAL ALUMINIUM CO LTD",
+      "shares": 10,
+      "purchased": null,
+      "avg_price": 312.79,
+      "from_book": false
+    },
+    {
+      "symbol": null,
+      "isin": "INE296D01010",
+      "name": "NATIONAL OXYGEN LTD.",
+      "shares": 25,
+      "purchased": null,
+      "avg_price": 126.89,
+      "from_book": false
+    },
+    {
+      "symbol": "GOLDBEES",
+      "isin": "INF204KB17I5",
+      "name": "NIP IND ETF GOLD BEES",
+      "shares": 30,
+      "purchased": null,
+      "avg_price": 90.7,
+      "from_book": false
+    },
+    {
+      "symbol": "SILVERBEES",
+      "isin": "INF204KC1402",
+      "name": "NIPPONAMC - NETFSILVER",
+      "shares": 11,
+      "purchased": null,
+      "avg_price": 266.66,
+      "from_book": false
+    },
+    {
+      "symbol": "NUVAMA",
+      "isin": "INE531F01023",
+      "name": "NUVAMA WEALTH MANAGE LTD",
+      "shares": 2,
+      "purchased": null,
+      "avg_price": 1811.4,
+      "from_book": false
+    },
+    {
+      "symbol": "OIL",
+      "isin": "INE274J01014",
+      "name": "OIL INDIA LTD",
+      "shares": 7,
+      "purchased": null,
+      "avg_price": 462.89,
+      "from_book": false
+    },
+    {
+      "symbol": "OMPOWER",
+      "isin": "INE25E901019",
+      "name": "OM POWER TRANSMISSION LTD",
+      "shares": 53,
+      "purchased": null,
+      "avg_price": 174.39,
+      "from_book": false
+    },
+    {
+      "symbol": "PARADEEP",
+      "isin": "INE088F01024",
+      "name": "PARADEEP PHOSPHATES LTD",
+      "shares": 63,
+      "purchased": null,
+      "avg_price": 84.75,
+      "from_book": false
+    },
+    {
+      "symbol": "PCBL",
+      "isin": "INE602A01031",
+      "name": "PCBL CHEMICAL LIMITED",
+      "shares": 17,
+      "purchased": null,
+      "avg_price": 342.23,
+      "from_book": false
+    },
+    {
+      "symbol": "PPLPHARMA",
+      "isin": "INE0DK501011",
+      "name": "PIRAMAL PHARMA LIMITED",
+      "shares": 6,
+      "purchased": null,
+      "avg_price": 197.0,
+      "from_book": false
+    },
+    {
+      "symbol": "PGINVIT",
+      "isin": "INE0GGX23010",
+      "name": "POWERGRID INFRA. INVITS",
+      "shares": 12,
+      "purchased": null,
+      "avg_price": 88.12,
+      "from_book": false
+    },
+    {
+      "symbol": "PRESTIGE",
+      "isin": "INE811K01011",
+      "name": "PRESTIGE ESTATE LTD",
+      "shares": 3,
+      "purchased": null,
+      "avg_price": 1477.26,
+      "from_book": false
+    },
+    {
+      "symbol": "QPOWER",
+      "isin": "INE0SII01026",
+      "name": "QUALITY POWER ELEC EQUP L",
+      "shares": 30,
+      "purchased": null,
+      "avg_price": 711.19,
+      "from_book": false
+    },
+    {
+      "symbol": "RVNL",
+      "isin": "INE415G01027",
+      "name": "RAIL VIKAS NIGAM LIMITED",
+      "shares": 13,
+      "purchased": null,
+      "avg_price": 323.75,
+      "from_book": false
+    },
+    {
+      "symbol": "REDINGTON",
+      "isin": "INE891D01026",
+      "name": "REDINGTON LIMITED",
+      "shares": 13,
+      "purchased": null,
+      "avg_price": 253.51,
+      "from_book": false
+    },
+    {
+      "symbol": "RELIANCE",
+      "isin": "INE002A01018",
+      "name": "RELIANCE INDUSTRIES LTD",
+      "shares": 3,
+      "purchased": null,
+      "avg_price": 1320.06,
+      "from_book": false
+    },
+    {
+      "symbol": "RPOWER",
+      "isin": "INE614G01033",
+      "name": "RELIANCE POWER LTD.",
+      "shares": 189,
+      "purchased": null,
+      "avg_price": 33.72,
+      "from_book": false
+    },
+    {
+      "symbol": "SAILIFE",
+      "isin": "INE570L01029",
+      "name": "SAI LIFE SCIENCES LIMITED",
+      "shares": 10,
+      "purchased": null,
+      "avg_price": 730.93,
+      "from_book": false
+    },
+    {
+      "symbol": null,
+      "isin": "INE799C01049",
+      "name": "SANMIT INFRA LIMITED",
+      "shares": 5,
+      "purchased": null,
+      "avg_price": 128.0,
+      "from_book": false
+    },
+    {
+      "symbol": null,
+      "isin": "INE572J20011",
+      "name": "SPANDANA SPHOORTY FIN",
+      "shares": 34,
+      "purchased": null,
+      "avg_price": 0.0,
+      "from_book": false
+    },
+    {
+      "symbol": "LOTUSDEV",
+      "isin": "INE0V9Q01010",
+      "name": "SRI LOTUS DEVLPRS N RTY L",
+      "shares": 27,
+      "purchased": null,
+      "avg_price": 151.67,
+      "from_book": false
+    },
+    {
+      "symbol": "SUNPHARMA",
+      "isin": "INE044A01036",
+      "name": "SUN PHARMACEUTICAL IND L",
+      "shares": 4,
+      "purchased": null,
+      "avg_price": 1791.91,
+      "from_book": false
+    },
+    {
+      "symbol": "SUPRAJIT",
+      "isin": "INE399C01030",
+      "name": "SUPRAJIT ENGINEERING LTD",
+      "shares": 3,
+      "purchased": null,
+      "avg_price": 459.35,
+      "from_book": false
+    },
+    {
+      "symbol": "TATACAP",
+      "isin": "INE976I01016",
+      "name": "TATA CAPITAL LIMITED",
+      "shares": 23,
+      "purchased": null,
+      "avg_price": 326.0,
+      "from_book": false
+    },
+    {
+      "symbol": "TATACHEM",
+      "isin": "INE092A01019",
+      "name": "TATA CHEMICALS LTD",
+      "shares": 18,
+      "purchased": null,
+      "avg_price": 761.83,
+      "from_book": false
+    },
+    {
+      "symbol": "TMCV",
+      "isin": "INE1TAE01010",
+      "name": "TATA MOTORS LIMITED",
+      "shares": 23,
+      "purchased": null,
+      "avg_price": 360.74,
+      "from_book": false
+    },
+    {
+      "symbol": "TMPV",
+      "isin": "INE155A01022",
+      "name": "TATA MOTORS PASS VEH LTD",
+      "shares": 19,
+      "purchased": null,
+      "avg_price": 445.99,
+      "from_book": false
+    },
+    {
+      "symbol": "TATASTEEL",
+      "isin": "INE081A01020",
+      "name": "TATA STEEL LIMITED",
+      "shares": 11,
+      "purchased": null,
+      "avg_price": 167.13,
+      "from_book": false
+    },
+    {
+      "symbol": "TATAGOLD",
+      "isin": "INF277KA1976",
+      "name": "TATAAML-TATAGOLD",
+      "shares": 100,
+      "purchased": null,
+      "avg_price": 14.73,
+      "from_book": false
+    },
+    {
+      "symbol": "SOUTHBANK",
+      "isin": "INE683A01023",
+      "name": "THE SOUTH INDIAN BANK LTD",
+      "shares": 10,
+      "purchased": null,
+      "avg_price": 26.04,
+      "from_book": false
+    },
+    {
+      "symbol": "TRITURBINE",
+      "isin": "INE152M01016",
+      "name": "TRIVENI TURBINE LIMITED",
+      "shares": 2,
+      "purchased": null,
+      "avg_price": 533.35,
+      "from_book": false
+    },
+    {
+      "symbol": "TTKPRESTIG",
+      "isin": "INE690A01028",
+      "name": "TTK PRESTIGE LTD",
+      "shares": 5,
+      "purchased": null,
+      "avg_price": 643.78,
+      "from_book": false
+    },
+    {
+      "symbol": "URBANCO",
+      "isin": "INE0CAZ01013",
+      "name": "URBAN COMPANY LIMITED",
+      "shares": 16,
+      "purchased": null,
+      "avg_price": 139.08,
+      "from_book": false
+    },
+    {
+      "symbol": "ZOTA",
+      "isin": "INE358U01012",
+      "name": "ZOTA HEALTH CARE LIMITED",
+      "shares": 8,
+      "purchased": null,
+      "avg_price": 1025.01,
+      "from_book": false
+    }
+  ]
+}
