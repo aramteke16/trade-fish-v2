@@ -1,6 +1,6 @@
 """Weekly top 3.
 
-The rank is the last 90 sessions. The list is the pharma universe plus the
+The rank is the last 126 sessions. The list is the pharma universe plus the
 symbols already on the book. The top 3 share the weekly budget by the
 network weights, highest weight first, in whole shares. A name whose one
 share costs more than its slice waits.
@@ -12,7 +12,7 @@ the buys. Prices come from Upstox.
 from datetime import date
 
 from assistant.clock import today
-from assistant.config import ACTOR_PATH, INDEX_BARS
+from assistant.config import ACTOR_PATH, INDEX_BARS, RANK_SESSIONS
 from assistant.db import get_settings, record_decision
 from assistant.engine import engine
 from assistant.holdings import load
@@ -44,7 +44,8 @@ def _run_week(source: str) -> dict:
     log.info("decision close %s, Upstox prices loaded for %d symbols", day, len(series))
 
     held = {lot["symbol"] for lot in book["lots"] if lot.get("symbol") and int(lot.get("shares") or 0) > 0}
-    ranking = _ranking(market, day, set(engine.MIDCAP), held)
+    universe = set(engine.PHARMA_ALL) | set(engine.POWER)
+    ranking = _ranking(market, day, universe, held)
     top = ranking[: engine.N_HOLD]
     log.info("top 3: %s", ", ".join(f"{symbol} {score:.3f}" for symbol, score in top) or "none")
 
@@ -81,7 +82,7 @@ def _run_week(source: str) -> dict:
 
 
 def _symbols(book: dict) -> list[str]:
-    names = set(engine.MIDCAP)
+    names = set(engine.PHARMA_ALL) | set(engine.POWER)
     for lot in book["lots"]:
         if lot.get("symbol"):
             names.add(lot["symbol"])
@@ -106,8 +107,8 @@ def _decision_day(series: dict) -> date:
 
 
 def _ranking(market, day: date, pharma: set[str], held: set[str]) -> list[tuple[str, float]]:
-    """Same 90-day score as the tested book. Holdings join the midcap list."""
-    log.info("buy rank is current holdings plus the midcap list")
+    """Last 126 sessions, about six months. Holdings join pharma and power."""
+    log.info("buy rank is current holdings plus pharma and power midcaps")
     raw = []
     for symbol, one in market.symbols.items():
         if symbol not in pharma and symbol not in held:
@@ -115,13 +116,13 @@ def _ranking(market, day: date, pharma: set[str], held: set[str]) -> list[tuple[
         # A name you already hold does not wait out the one-year listing rule.
         if symbol not in held and not engine.seasoned(one, day):
             continue
-        hist = engine.history_until(one, market.loc[symbol], day, engine.LIM_WINDOW)
+        hist = engine.history_until(one, market.loc[symbol], day, RANK_SESSIONS)
         if hist is None:
-            log.debug("no 90-day window for %s", symbol)
+            log.debug("no %d-session window for %s", RANK_SESSIONS, symbol)
             continue
-        raw.append((symbol, engine.lim_score(hist[0], hist[3])))
+        raw.append((symbol, engine.lim_score(hist[0], hist[3], RANK_SESSIONS)))
     if not raw:
-        log.info("no name had 90 sessions")
+        log.info("no name had %d sessions", RANK_SESSIONS)
         return []
     best = max(score for _, score in raw)
     scale = max(1.0, best)

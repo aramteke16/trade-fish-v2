@@ -30,6 +30,8 @@ DECISION_WEEKDAY = 0
 DECISION_HOUR = 9
 DECISION_MINUTE = 15
 
+# Buy rank looks back 126 trading sessions, about six months. 252 sessions is one year.
+RANK_SESSIONS = 126
 # Weekly buy budget. The settings page stores the live number in the database.
 WEEKLY_CASH = 5_000
 # Kept so an older database row still has a value. The week no longer spends it.

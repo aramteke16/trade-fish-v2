@@ -40,22 +40,18 @@ INDEX_KEY = "NSE_INDEX|Nifty Pharma"
 INDEX_SYMBOL = "NIFTYPHARMA"
 IST = ZoneInfo("Asia/Kolkata")
 
-# Nifty Midcap 150 healthcare names. Drug makers and the hospital chains.
+# Nifty Midcap 150 drug makers. Hospitals, diagnostics, and devices stay out.
 PHARMA = (
-    "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "ASTERDM", "AUROPHARMA",
-    "BIOCON", "FORTIS", "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS",
-    "LUPIN", "MANKIND", "MEDANTA", "NH",
+    "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "AUROPHARMA", "BIOCON",
+    "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS", "LUPIN", "MANKIND",
 )
 
 # Small-cap drug makers are no longer a live universe. The old result file stays.
 PHARMA_SMALL = ()
 
-# Drug makers from the healthcare list. The weekly buy ranks MIDCAP, not this.
+# Same drug makers. The weekly buy ranks this list plus POWER, and current holdings.
 # A holding stays eligible even when it is not a midcap. Names join when one year old.
-PHARMA_ALL = (
-    "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "AUROPHARMA", "BIOCON",
-    "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS", "LUPIN", "MANKIND",
-)
+PHARMA_ALL = PHARMA
 
 # Nifty Midcap 150 names from generation, transmission, and power equipment.
 # Small caps, SME names, and names below the Nifty 500 are out.
@@ -63,48 +59,6 @@ PHARMA_ALL = (
 POWER = (
     "APARINDS", "BHEL", "GVT&D", "JSWENERGY", "KEI", "NHPC", "NLCINDIA",
     "NTPCGREEN", "PREMIERENE", "SUZLON", "THERMAX", "TORNTPOWER", "WAAREEENER",
-)
-
-# Full Nifty Midcap 150, ranks 101-250. The weekly buy ranks this set.
-MIDCAP = (
-    "360ONE", "ABBOTINDIA", "ABCAPITAL", "AIAENG",
-    "AIIL", "AJANTPHARM", "ALKEM", "ANTHEM",
-    "APARINDS", "APLAPOLLO", "ASHOKLEY", "ASTERDM",
-    "ASTRAL", "ATGL", "AUBANK", "AUROPHARMA",
-    "BAJAJHFL", "BALKRISIND", "BANKINDIA", "BDL",
-    "BERGEPAINT", "BHARATFORG", "BHARTIHEXA", "BHEL",
-    "BIOCON", "BLUESTARCO", "COCHINSHIP", "COFORGE",
-    "COLPAL", "CONCOR", "COROMANDEL", "CRISIL",
-    "DABUR", "DALBHARAT", "DIXON", "EMBASSY",
-    "ENDURANCE", "ESCORTS", "EXIDEIND", "FACT",
-    "FEDERALBNK", "FLUOROCHEM", "FORTIS", "GICRE",
-    "GLAXO", "GLENMARK", "GMRAIRPORT", "GODFRYPHLP",
-    "GODREJIND", "GODREJPROP", "GROWW", "GVT&D",
-    "HAVELLS", "HDBFS", "HEROMOTOCO", "HEXT",
-    "HINDCOPPER", "HINDPETRO", "HUDCO", "ICICIAMC",
-    "ICICIGI", "ICICILIFE", "IDFCFIRSTB", "INDHOTEL",
-    "INDIANB", "INDUSINDBK", "INDUSTOWER", "IOB",
-    "IPCALAB", "IRCTC", "IREDA", "ITCHOTELS",
-    "JKCEMENT", "JSL", "JSWENERGY", "JSWINFRA",
-    "JUBLFOOD", "KALYANKJIL", "KEI", "KPRMILL",
-    "LAURUSLABS", "LENSKART", "LGEINDIA", "LICHSGFIN",
-    "LICI", "LINDEINDIA", "LLOYDSME", "LODHA",
-    "LTF", "LTTS", "LUPIN", "M&MFIN",
-    "MAHABANK", "MANKIND", "MARICO", "MCX",
-    "MEDANTA", "MEESHO", "MFSL", "MOTILALOFS",
-    "MPHASIS", "MRF", "NAM-INDIA", "NATIONALUM",
-    "NAUKRI", "NH", "NHPC", "NLCINDIA",
-    "NMDC", "NTPCGREEN", "NYKAA", "OBEROIRLTY",
-    "OFSS", "OIL", "PAGEIND", "PATANJALI",
-    "PAYTM", "PERSISTENT", "PETRONET", "PHOENIXLTD",
-    "PIIND", "PIRAMALFIN", "POLICYBZR", "PREMIERENE",
-    "PRESTIGE", "RADICO", "RECLTD", "RVNL",
-    "SAIL", "SBICARD", "SCHAEFFLER", "SHREECEM",
-    "SRF", "SUNDARMFIN", "SUPREMEIND", "SUZLON",
-    "SWIGGY", "TATACOMM", "TATAINVEST", "THERMAX",
-    "TIINDIA", "TORNTPOWER", "UBL", "UNITDSPR",
-    "UNOMINDA", "UPL", "VMM", "VOLTAS",
-    "WAAREEENER", "YESBANK",
 )
 
 FETCH_START = date(2018, 1, 1)
@@ -593,11 +547,12 @@ def atr(highs, lows, closes, n: int = 14) -> float:
     return float(np.mean(tr))
 
 
-def lim_score(opens: np.ndarray, closes: np.ndarray) -> float:
-    if len(closes) < LIM_WINDOW:
+def lim_score(opens: np.ndarray, closes: np.ndarray, window: int | None = None) -> float:
+    span = LIM_WINDOW if window is None else window
+    if len(closes) < span:
         return 0.0
-    window_o = opens[-LIM_WINDOW:]
-    window_c = closes[-LIM_WINDOW:]
+    window_o = opens[-span:]
+    window_c = closes[-span:]
     factor = window_c / window_o * (1.0 - LIM_DELTA) ** 2
     good = factor[factor >= 1.0]
     if len(good) == 0:
