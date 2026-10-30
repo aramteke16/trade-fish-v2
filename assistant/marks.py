@@ -80,6 +80,8 @@ def _row(lot: dict, one, as_of: date, top: set, sell_bar, min_hold: int) -> dict
         listed = "pharma"
     elif symbol in engine.POWER:
         listed = "electricity"
+    elif symbol in engine.MIDCAP:
+        listed = "midcap"
     else:
         listed = "personal"
     days_to_sell = None

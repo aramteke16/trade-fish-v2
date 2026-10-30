@@ -44,7 +44,7 @@ def _run_week(source: str) -> dict:
     log.info("decision close %s, Upstox prices loaded for %d symbols", day, len(series))
 
     held = {lot["symbol"] for lot in book["lots"] if lot.get("symbol") and int(lot.get("shares") or 0) > 0}
-    ranking = _ranking(market, day, set(engine.PHARMA_ALL), held)
+    ranking = _ranking(market, day, set(engine.MIDCAP), held)
     top = ranking[: engine.N_HOLD]
     log.info("top 3: %s", ", ".join(f"{symbol} {score:.3f}" for symbol, score in top) or "none")
 
@@ -81,7 +81,7 @@ def _run_week(source: str) -> dict:
 
 
 def _symbols(book: dict) -> list[str]:
-    names = set(engine.PHARMA_ALL)
+    names = set(engine.MIDCAP)
     for lot in book["lots"]:
         if lot.get("symbol"):
             names.add(lot["symbol"])
@@ -106,8 +106,8 @@ def _decision_day(series: dict) -> date:
 
 
 def _ranking(market, day: date, pharma: set[str], held: set[str]) -> list[tuple[str, float]]:
-    """Same 90-day score as the tested book. Holdings join the pharma list."""
-    log.info("buy rank is current holdings plus the pharma list")
+    """Same 90-day score as the tested book. Holdings join the midcap list."""
+    log.info("buy rank is current holdings plus the midcap list")
     raw = []
     for symbol, one in market.symbols.items():
         if symbol not in pharma and symbol not in held:

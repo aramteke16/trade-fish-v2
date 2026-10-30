@@ -40,26 +40,71 @@ INDEX_KEY = "NSE_INDEX|Nifty Pharma"
 INDEX_SYMBOL = "NIFTYPHARMA"
 IST = ZoneInfo("Asia/Kolkata")
 
-# Nifty Midcap 150 drug makers only. Small-cap names are out.
-# Hospitals, diagnostics, devices, and chemicals stay out.
+# Nifty Midcap 150 healthcare names. Drug makers and the hospital chains.
 PHARMA = (
-    "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "AUROPHARMA", "BIOCON",
-    "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS", "LUPIN", "MANKIND",
+    "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "ASTERDM", "AUROPHARMA",
+    "BIOCON", "FORTIS", "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS",
+    "LUPIN", "MANKIND", "MEDANTA", "NH",
 )
 
 # Small-cap drug makers are no longer a live universe. The old result file stays.
 PHARMA_SMALL = ()
 
-# Same midcap list. The weekly buy ranks this set plus the current holdings.
+# Drug makers from the healthcare list. The weekly buy ranks MIDCAP, not this.
 # A holding stays eligible even when it is not a midcap. Names join when one year old.
-PHARMA_ALL = PHARMA
+PHARMA_ALL = (
+    "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "AUROPHARMA", "BIOCON",
+    "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS", "LUPIN", "MANKIND",
+)
 
 # Nifty Midcap 150 names from generation, transmission, and power equipment.
 # Small caps, SME names, and names below the Nifty 500 are out.
 # Large caps stay out. Oil, gas, lenders, and home-appliance brands stay out.
 POWER = (
-    "APARINDS", "GVT&D", "JSWENERGY", "KEI", "NHPC", "NLCINDIA", "NTPCGREEN",
-    "PREMIERENE", "SUZLON", "THERMAX", "TORNTPOWER", "WAAREEENER",
+    "APARINDS", "BHEL", "GVT&D", "JSWENERGY", "KEI", "NHPC", "NLCINDIA",
+    "NTPCGREEN", "PREMIERENE", "SUZLON", "THERMAX", "TORNTPOWER", "WAAREEENER",
+)
+
+# Full Nifty Midcap 150, ranks 101-250. The weekly buy ranks this set.
+MIDCAP = (
+    "360ONE", "ABBOTINDIA", "ABCAPITAL", "AIAENG",
+    "AIIL", "AJANTPHARM", "ALKEM", "ANTHEM",
+    "APARINDS", "APLAPOLLO", "ASHOKLEY", "ASTERDM",
+    "ASTRAL", "ATGL", "AUBANK", "AUROPHARMA",
+    "BAJAJHFL", "BALKRISIND", "BANKINDIA", "BDL",
+    "BERGEPAINT", "BHARATFORG", "BHARTIHEXA", "BHEL",
+    "BIOCON", "BLUESTARCO", "COCHINSHIP", "COFORGE",
+    "COLPAL", "CONCOR", "COROMANDEL", "CRISIL",
+    "DABUR", "DALBHARAT", "DIXON", "EMBASSY",
+    "ENDURANCE", "ESCORTS", "EXIDEIND", "FACT",
+    "FEDERALBNK", "FLUOROCHEM", "FORTIS", "GICRE",
+    "GLAXO", "GLENMARK", "GMRAIRPORT", "GODFRYPHLP",
+    "GODREJIND", "GODREJPROP", "GROWW", "GVT&D",
+    "HAVELLS", "HDBFS", "HEROMOTOCO", "HEXT",
+    "HINDCOPPER", "HINDPETRO", "HUDCO", "ICICIAMC",
+    "ICICIGI", "ICICILIFE", "IDFCFIRSTB", "INDHOTEL",
+    "INDIANB", "INDUSINDBK", "INDUSTOWER", "IOB",
+    "IPCALAB", "IRCTC", "IREDA", "ITCHOTELS",
+    "JKCEMENT", "JSL", "JSWENERGY", "JSWINFRA",
+    "JUBLFOOD", "KALYANKJIL", "KEI", "KPRMILL",
+    "LAURUSLABS", "LENSKART", "LGEINDIA", "LICHSGFIN",
+    "LICI", "LINDEINDIA", "LLOYDSME", "LODHA",
+    "LTF", "LTTS", "LUPIN", "M&MFIN",
+    "MAHABANK", "MANKIND", "MARICO", "MCX",
+    "MEDANTA", "MEESHO", "MFSL", "MOTILALOFS",
+    "MPHASIS", "MRF", "NAM-INDIA", "NATIONALUM",
+    "NAUKRI", "NH", "NHPC", "NLCINDIA",
+    "NMDC", "NTPCGREEN", "NYKAA", "OBEROIRLTY",
+    "OFSS", "OIL", "PAGEIND", "PATANJALI",
+    "PAYTM", "PERSISTENT", "PETRONET", "PHOENIXLTD",
+    "PIIND", "PIRAMALFIN", "POLICYBZR", "PREMIERENE",
+    "PRESTIGE", "RADICO", "RECLTD", "RVNL",
+    "SAIL", "SBICARD", "SCHAEFFLER", "SHREECEM",
+    "SRF", "SUNDARMFIN", "SUPREMEIND", "SUZLON",
+    "SWIGGY", "TATACOMM", "TATAINVEST", "THERMAX",
+    "TIINDIA", "TORNTPOWER", "UBL", "UNITDSPR",
+    "UNOMINDA", "UPL", "VMM", "VOLTAS",
+    "WAAREEENER", "YESBANK",
 )
 
 FETCH_START = date(2018, 1, 1)
