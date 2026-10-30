@@ -70,9 +70,9 @@ def next_session(day: date) -> str:
 
 
 def classify(symbol: str, book: dict) -> str:
-    if symbol in engine.PHARMA_ALL:
+    if symbol in engine.PHARMA_ALL or symbol in engine.PHARMA_FAMOUS:
         return "pharma"
-    if symbol in engine.POWER:
+    if symbol in engine.POWER or symbol in engine.POWER_FAMOUS:
         return "electricity"
     if _held(symbol, book):
         return "personal"
@@ -246,7 +246,7 @@ def resolve_query(text: str, book: dict) -> tuple:
         raise ValueError("enter a symbol or company name")
     table = equity_names()
     symbol = query.upper()
-    known = set(engine.PHARMA_ALL) | set(engine.POWER) | _held_symbols(book)
+    known = set(engine.PHARMA_ALL) | set(engine.PHARMA_FAMOUS) | set(engine.POWER) | set(engine.POWER_FAMOUS) | _held_symbols(book)
     if symbol in table or symbol in known:
         return symbol, table.get(symbol) or _lot_name(symbol, book) or symbol
     folded = query.casefold()

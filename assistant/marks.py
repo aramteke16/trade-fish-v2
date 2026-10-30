@@ -76,9 +76,9 @@ def _row(lot: dict, one, as_of: date, top: set, sell_bar, min_hold: int) -> dict
                 hold_share = _up_share(one.open[mask], one.close[mask])
     if not symbol:
         listed = "unscored"
-    elif symbol in engine.PHARMA_ALL:
+    elif symbol in engine.PHARMA_ALL or symbol in engine.PHARMA_FAMOUS:
         listed = "pharma"
-    elif symbol in engine.POWER:
+    elif symbol in engine.POWER or symbol in engine.POWER_FAMOUS:
         listed = "electricity"
     else:
         listed = "personal"

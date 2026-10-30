@@ -46,19 +46,39 @@ PHARMA = (
     "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS", "LUPIN", "MANKIND",
 )
 
-# Small-cap drug makers are no longer a live universe. The old result file stays.
+# Research small-cap path. Left empty so an old run is not restarted.
+# The live famous small caps are PHARMA_FAMOUS.
 PHARMA_SMALL = ()
 
-# Same drug makers. The weekly buy ranks this list plus POWER, and current holdings.
+# Same drug makers. The weekly buy ranks this list, POWER, the famous small
+# caps below, and current holdings.
 # A holding stays eligible even when it is not a midcap. Names join when one year old.
 PHARMA_ALL = PHARMA
 
 # Nifty Midcap 150 names from generation, transmission, and power equipment.
-# Small caps, SME names, and names below the Nifty 500 are out.
 # Large caps stay out. Oil, gas, lenders, and home-appliance brands stay out.
+# Famous small caps in the same industries are POWER_FAMOUS.
 POWER = (
     "APARINDS", "BHEL", "GVT&D", "JSWENERGY", "KEI", "NHPC", "NLCINDIA",
     "NTPCGREEN", "PREMIERENE", "SUZLON", "THERMAX", "TORNTPOWER", "WAAREEENER",
+)
+
+# Nifty Smallcap 250 drug makers and CDMOs. Hospitals, diagnostics, devices,
+# and chemicals stay out. A name listed under one year stays out. A last
+# close under ₹20 stays out. Names outside this index stay out.
+PHARMA_FAMOUS = (
+    "CAPLIPOINT", "COHANCE", "CONCORDBIO", "EMCURE", "GLAND", "GRANULES",
+    "NATCOPHARM", "NEULANDLAB", "ONESOURCE", "PPLPHARMA", "RUBICON",
+    "SAILIFE", "SYNGENE", "WOCKPHARMA",
+)
+
+# Nifty Smallcap 250 generation, transmission, and electrical equipment.
+# Same age and price gates. JPPOWER and RPOWER are under ₹20 and stay out.
+# CLEANMAX, EMMVEE, and VEDPOWER are under one year old and stay out.
+POWER_FAMOUS = (
+    "ACMESOLAR", "AZAD", "CESC", "ELECON", "FINCABLES", "INOXWIND", "KEC",
+    "KPIL", "MTARTECH", "NAVA", "RRKABEL", "SCHNEIDER", "SJVN", "TARIL",
+    "TDPOWERSYS", "TECHNOE", "TRITURBINE",
 )
 
 FETCH_START = date(2018, 1, 1)
