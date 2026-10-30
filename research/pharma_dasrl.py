@@ -1,4 +1,4 @@
-"""DASRL clone on NSE mid/small pharma.
+"""DASRL clone on NSE midcap pharma.
 
 The ranker is the paper's long-intensity score: 90 sessions, top 3, names
 refreshed when the next session is a new month. Weights are set on that same
@@ -40,88 +40,26 @@ INDEX_KEY = "NSE_INDEX|Nifty Pharma"
 INDEX_SYMBOL = "NIFTYPHARMA"
 IST = ZoneInfo("Asia/Kolkata")
 
-# Drug makers in Nifty MidSmall Healthcare as of the Oct 2026 constituent file.
-# Hospitals, diagnostics, devices, and chemicals in that index are left out.
-# Large-cap Nifty Pharma names are not in this list.
+# Nifty Midcap 150 drug makers only. Small-cap names are out.
+# Hospitals, diagnostics, devices, and chemicals stay out.
 PHARMA = (
     "ABBOTINDIA", "AJANTPHARM", "ALKEM", "ANTHEM", "AUROPHARMA", "BIOCON",
-    "COHANCE", "GLAND", "GLAXO", "GLENMARK", "GRANULES", "IPCALAB",
-    "LAURUSLABS", "LUPIN", "MANKIND", "NATCOPHARM", "NEULANDLAB",
-    "ONESOURCE", "PPLPHARMA", "SAILIFE", "SYNGENE", "WOCKPHARMA",
+    "GLAXO", "GLENMARK", "IPCALAB", "LAURUSLABS", "LUPIN", "MANKIND",
 )
 
-# Same drug makers, restricted to the current Nifty Smallcap 250.
-# Midcap 150 names in the pharma tuple are left out. Hospitals,
-# diagnostics, devices, and chemicals stay out.
-PHARMA_SMALL = (
-    "COHANCE", "GLAND", "GRANULES", "NATCOPHARM", "NEULANDLAB",
-    "ONESOURCE", "PPLPHARMA", "SAILIFE", "SYNGENE", "WOCKPHARMA",
-)
+# Small-cap drug makers are no longer a live universe. The old result file stays.
+PHARMA_SMALL = ()
 
-# Every current NSE EQ/BE pharma name outside the Nifty 100.
-# Hospitals, diagnostics, devices, and the industrial-enzyme name are out.
-# The six large-cap drug makers (Sun, Divi's, Torrent, Zydus, Cipla, Dr Reddy's)
-# stay out under the mid-and-small rule. Names join the ranker when one year old.
-PHARMA_ALL = (
-    "AAREYDRUGS", "AARTIDRUGS", "AARTIPHARM", "ABBOTINDIA", "ACUTAAS", "AHCL",
-    "AJANTPHARM", "AKUMS", "ALBERTDAVD", "ALIVUS", "ALKEM", "ALPA", "AMANTA",
-    "AMBALALSA", "AMRUTANJAN", "ANTHEM", "ANUHPHR", "APLLTD", "ASTRAZEN",
-    "AUROPHARMA", "BAFNAPH", "BAJAJHCARE", "BALAXI", "BALPHARMA", "BETA",
-    "BIOCON", "BIOFILCHEM", "BLISSGVS", "BLUEJET", "BROOKS", "CAPLIPOINT",
-    "COHANCE", "CONCORDBIO", "CORONA", "DCAL", "EMCURE", "ERIS", "FDC",
-    "FERMENTA", "GLAND", "GLAXO", "GLENMARK", "GRANULES", "GUFICBIO", "GUJTHEM",
-    "HALEOSLABS", "HESTERBIO", "HIKAL", "INDOCO", "INDSWFTLAB", "INNOVACAP",
-    "IOLCP", "IPCALAB", "JAGSNPHARM", "JSLL", "JUBLPHARMA", "KILITCH", "KOPRAN",
-    "KPL", "KREBSBIO", "LAURUSLABS", "LINCOLN", "LUPIN", "LYKALABS", "MANGALAM",
-    "MANKIND", "MARKSANS", "MEDICAMEQ", "MEDICO", "MOREPENLAB", "NATCAPSUQ",
-    "NATCOPHARM", "NECLIFE", "NEULANDLAB", "NGLFINE", "NOVARTIND", "ONESOURCE",
-    "ORCHPHARMA", "ORTINGLOBE", "PANACEABIO", "PAR", "PFIZER", "PGHL",
-    "PPLPHARMA", "RPGLIFE", "RUBICON", "SAILIFE", "SAIPARENT", "SAKAR", "SANOFI",
-    "SANOFICONR", "SENORES", "SHILPAMED", "SHUKRAPHAR", "SIGACHI", "SMSPHARMA",
-    "SOLARA", "SPARC", "STAR", "SUDEEPPHRM", "SUPRIYA", "SUVEN", "SYMBIOTEC",
-    "SYNCOMF", "SYNGENE", "THEMISMED", "UNICHEMLAB", "VAISHALI", "VALIANTLAB",
-    "VENUSREM", "VINEETLAB", "VIVIMEDLAB", "VIYASH", "WANBURY", "WINDLAS",
-    "WOCKPHARMA", "ZIMLAB", "ZOTA",
-)
+# Same midcap list. The weekly buy ranks this set plus the current holdings.
+# A holding stays eligible even when it is not a midcap. Names join when one year old.
+PHARMA_ALL = PHARMA
 
-# Every current NSE EQ/BE name in generation, transmission, and the
-# equipment that builds turbines, transformers, cables, and lines.
-# The NSE Power industry and the NSE Electrical Equipment industry
-# (heavy and other) are included. Outside the Nifty 100.
-# Large caps are out, including BHEL.
-# GVT&D stays: mid-cap prints sit on the large-cap line.
-# Oil, gas, lenders, home-appliance brands, InvITs, and BSE-only names are out.
-# NSE SME (SM and ST) names from these two industries are in. They are small caps.
+# Nifty Midcap 150 names from generation, transmission, and power equipment.
+# Small caps, SME names, and names below the Nifty 500 are out.
+# Large caps stay out. Oil, gas, lenders, and home-appliance brands stay out.
 POWER = (
-    # Generation and the NSE Power industry.
-    "ACMESOLAR", "CESC", "CLEANMAX", "DPSCLTD", "ENERGYDEV", "GIPCL", "GKENERGY",
-    "GMRP&UI", "GREENPOWER", "GVKPIL", "INDOWIND", "INOXGREEN", "JNPR",
-    "JPPOWER", "JSWENERGY", "KARMAENG", "KPEL", "KPIGREEN", "NAVA", "NHPC",
-    "NLCINDIA", "NTPCGREEN", "PTC", "RELINFRA", "RELTD", "RPOWER", "RTNPOWER",
-    "SJVN", "SURANAT&P", "TORNTPOWER", "TRIVENIPT", "UEL", "VEDPOWER",
-    # Transmission, lines, and plant work.
-    "ADVAIT", "JYOTISTRUC", "KEC", "KPIL", "OMPOWER", "POWERMECH",
-    "SKIPPER", "SWSOLAR", "TECHNOE", "TRANSRAILL",
-    # Equipment: turbines, transformers, switchgear, cables, winding wire,
-    # solar modules, meters, and power-system protection.
-    "AARTECH", "AEPL", "APARINDS", "ATLANTAELE", "AVALON", "AZAD", "BAJEL",
-    "BBL", "BGRENERGY", "BIRLACABLE", "CORDSCABLE", "DIACABS", "DYCL", "ELECON",
-    "EMMVEE", "EXICOM", "FINCABLES", "GENUSPOWER", "GVPIL", "GVT&D", "HPL",
-    "INA", "INDOTECH", "INOXWIND", "KANOHAR", "KARAMTARA", "KECL", "KEI",
-    "LASERPOWER", "LUMINO", "MARSONS", "MEIL", "MODISONLTD", "MTARTECH",
-    "NEUEON", "ONIXSOLAR", "ORIENTCABL", "PARACABLES", "PERMAGN", "PIGL",
-    "PLAZACABLE", "POWERICA", "PRECWIRE", "PREMIERENE", "PROSTARM", "QPOWER",
-    "RAMRAT", "RIR", "RISHABH", "RMC", "RRKABEL", "RTSPOWR", "S&SPOWER",
-    "SAATVIKGL", "SALZERELEC", "SCHNEIDER", "SERVOTECH", "SHILCTECH",
-    "SOLARWORLD", "SOLEX", "SPECTRUM", "SURANASOL", "SUZLON", "SWELECTES",
-    "TARAPUR", "TARIL", "TDPOWERSYS", "THERMAX", "TRITURBINE", "UNIVCABLES",
-    "URJA", "UTLSOLAR", "VETO", "VIDYAWIRES", "VIKRAMSOLR", "VIVIANA",
-    "VOLTAMP", "WAAREEENER", "WAAREEINDO", "WAAREERTL", "WEBELSOLAR", "ZODIAC",
-    # NSE SME, small caps, from the same two industries.
-    "AKANKSHA", "ALPEXSOLAR", "ANAWIL", "APS", "ATCENERGY", "AVANA", "DANISH",
-    "EEPL", "EFORCE", "GGBL", "GPECO", "HIMALAYAN", "ORIANA", "PARTH",
-    "SAAKSHI", "SAHAJSOLAR", "SEL", "SMARTEN", "SPCL", "SUPREMEPWR", "TROM",
-    "VDEAL", "VIVIDEL",
+    "APARINDS", "GVT&D", "JSWENERGY", "KEI", "NHPC", "NLCINDIA", "NTPCGREEN",
+    "PREMIERENE", "SUZLON", "THERMAX", "TORNTPOWER", "WAAREEENER",
 )
 
 FETCH_START = date(2018, 1, 1)
